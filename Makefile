@@ -1,9 +1,9 @@
-I_D = # Name of the Internet-Draft (without revision)
-REVNO = # I-D revision number
+I_D = draft-ietf-netmod-yang-json
+REVNO = 01
 DATE ?= $(shell date +%F)
 MODULES =
-FIGURES = model.tree
-EXAMPLE_BASE = example
+FIGURES = ex-get-reply.json
+EXAMPLE_BASE = ex
 EXAMPLE_TYPE = get-reply
 baty = $(EXAMPLE_BASE)-$(EXAMPLE_TYPE)
 EXAMPLE_INST = $(baty).xml
@@ -21,9 +21,9 @@ y2dopts = -t $(EXAMPLE_TYPE) -b $(EXAMPLE_BASE)
 
 .PHONY: all validate clean rnc refs
 
-all: $(idrev).txt $(schemas) model.tree
+all: $(idrev).txt
 
-$(idrev).xml: $(I_D).xml $(artworks) figures.ent yang.ent
+$(idrev).xml: $(I_D).xml $(artworks) figures.ent
 	@xsltproc $(xslpars) $(xsldir)/upd-i-d.xsl $< | xmllint --noent -o $@ -
 
 $(idrev).txt: $(idrev).xml
@@ -83,6 +83,12 @@ ietf-%.yang.aw: ietf-%.yang
 	cat $< >> $@;                    \
 	echo ']]></artwork>' >> $@
 
+model.xsl: hello.xml
+	pyang -f jsonxsl -o $@ -L $<
+
+$(baty).json: model.xsl $(EXAMPLE_INST)
+	xsltproc -o $@ $^
+
 $(schemas): hello.xml
 	yang2dsdl $(y2dopts) -L $<
 
@@ -98,5 +104,4 @@ model.tree: hello.xml
 	pyang $(PYANG_OPTS) -f tree -o $@ -L $<
 
 clean:
-	@rm -rf *.rng *.rnc *.sch *.dsrl hello.xml model.tree \
-	        $(idrev).* $(artworks) figures.ent yang.ent
+	@rm -rf hello.xml $(idrev).* $(artworks) figures.ent $(baty).json
