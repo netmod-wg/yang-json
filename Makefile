@@ -43,7 +43,7 @@ hello.xml: $(yams) hello-external.ent
 	@echo '</capabilities>' >> $@
 	@echo '</hello>' >> $@
 
-refs: yang.ent figures.ent $(artworks)
+refs: figures.ent $(artworks)
 	xsltproc --output stdrefs.ent $(xsldir)/get-refs.xsl $(I_D).xml
 
 yang.ent: $(yams)
