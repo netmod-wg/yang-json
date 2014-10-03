@@ -1,1 +1,3 @@
 <!-- capabilities of external modules -->
+    <capability>urn:ietf:params:xml:ns:yang:ietf-interfaces?module=ietf-interfaces&amp;features=if-mib</capability>
+    <capability>http://example.com/vlan?module=ex-vlan</capability>
