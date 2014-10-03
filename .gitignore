@@ -3,7 +3,8 @@ figures.ent
 yang.ent
 *.aw
 hello.xml
-model.tree
+model.*
+ex-get-reply.json
 *.rn[gc]
 *.sch
 *.dsrl
