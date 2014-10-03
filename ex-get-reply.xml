@@ -49,9 +49,7 @@
         <if-index>2</if-index>
         <phys-address>00:01:02:03:04:05</phys-address>
         <statistics>
-          <discontinuity-time>
-            2013-04-01T03:00:00+00:00
-          </discontinuity-time>
+          <discontinuity-time>2013-04-01T03:00:00+00:00</discontinuity-time>
           <!-- counters now shown here -->
         </statistics>
       </interface>
@@ -65,9 +63,7 @@
         <phys-address>00:01:02:03:04:06</phys-address>
         <higher-layer-if>eth1.10</higher-layer-if>
         <statistics>
-          <discontinuity-time>
-            2013-04-01T03:00:00+00:00
-          </discontinuity-time>
+          <discontinuity-time>2013-04-01T03:00:00+00:00</discontinuity-time>
           <!-- counters now shown here -->
         </statistics>
       </interface>
@@ -80,9 +76,7 @@
         <if-index>9</if-index>
         <lower-layer-if>eth1</lower-layer-if>
         <statistics>
-          <discontinuity-time>
-            2013-04-01T03:00:00+00:00
-          </discontinuity-time>
+          <discontinuity-time>2013-04-01T03:00:00+00:00</discontinuity-time>
           <!-- counters now shown here -->
         </statistics>
       </interface>
@@ -96,9 +90,7 @@
         <if-index>8</if-index>
         <phys-address>00:01:02:03:04:07</phys-address>
         <statistics>
-          <discontinuity-time>
-            2013-04-01T03:00:00+00:00
-          </discontinuity-time>
+          <discontinuity-time>2013-04-01T03:00:00+00:00</discontinuity-time>
           <!-- counters now shown here -->
         </statistics>
       </interface>
@@ -110,9 +102,7 @@
         <oper-status>up</oper-status>
         <if-index>1</if-index>
         <statistics>
-          <discontinuity-time>
-            2013-04-01T03:00:00+00:00
-          </discontinuity-time>
+          <discontinuity-time>2013-04-01T03:00:00+00:00</discontinuity-time>
           <!-- counters now shown here -->
         </statistics>
       </interface>

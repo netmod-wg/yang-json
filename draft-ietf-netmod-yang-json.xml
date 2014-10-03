@@ -824,6 +824,21 @@
 </middle>
 
 <back>
+  
+  <references title="Normative References">
+    &RFC7159;
+    &RFC2119;
+    &RFC6020;
+    &RFC6241;
+    &W3C.REC-xml-20081126;
+    &W3C.REC-xml-names-20091208;
+  </references>
+
+  <references title="Informative References">
+    &RFC7223;
+    &W3C.REC-xpath-19991116;
+    &I-D.ietf-netconf-restconf;
+  </references>
 
   <section anchor="app.ex-if"
 	   title="A Complete Example">
