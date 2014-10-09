@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module name="barmod"
+        xmlns="urn:ietf:params:xml:ns:yang:yin:1"
+        xmlns:test="http://example.com/barmod">
+  <namespace uri="http://example.com/barmod"/>
+  <prefix value="bar"/>
+  <import module="foomod">
+    <prefix value="foo"/>
+  </import>
+  <augment target-node="/foo:top">
+    <leaf name="bar">
+      <type name="uint8"/>
+    </leaf>
+  </container>
+</module>
