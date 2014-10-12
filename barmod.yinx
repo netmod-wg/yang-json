@@ -9,7 +9,7 @@
   </import>
   <augment target-node="/foo:top">
     <leaf name="bar">
-      <type name="uint8"/>
+      <type name="boolean"/>
     </leaf>
-  </container>
+  </augment>
 </module>
