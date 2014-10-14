@@ -362,13 +362,13 @@
 
       <section anchor="sec.numtypes" title="Numeric Datatypes">
         <t>A value of the "int8", "int16", "int32", "uint8", "uint16"
-        is represented as a JSON number.</t>
+	and "uint32" is represented as a JSON number.</t>
         <t>A value of the "int64", "uint64" or "decimal64" type is
         encoded as a JSON string whose contents is the lexical
         representation of that numeric value as specified in sections
         9.2.1 and 9.3.1 of <xref target="RFC6020"/>.</t>
         <t>For example, if the type of the leaf "foo" in <xref
-        target="sec.leaf"/> was "unit64" instead of "uint8", the
+        target="sec.leaf"/> was "uint64" instead of "uint8", the
         instance would have to be encoded as</t>
         <figure>
           <artwork>
