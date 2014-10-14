@@ -215,7 +215,6 @@
         the special array '[null]', depending on the type of the leaf
         (see <xref target="sec.datatypes"/> for the type encoding
         rules).</t>
-
         <t>Example: For the leaf node definition
         <figure>
           <artwork>
