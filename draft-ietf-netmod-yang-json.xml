@@ -54,15 +54,15 @@
       "application/yang.data+json).</t>
       <t>The specification of the YANG data modelling language <xref
       target="RFC6020"/> defines only XML encoding for data instances,
-      i.e. contents of configuration datasores, state data, RFC input
+      i.e. contents of configuration datastores, state data, RFC input
       and output parameters, and event notifications. The aim of this
       document is to define rules for encoding the same data as
       JavaScript Object Notation (JSON) text <xref
       target="RFC7159"/>.</t>
       <t>In order to achieve maximum interoperability while allowing
-      implementations to use any existing JSON parser, the JSON
-      encoding rules follow, as much as possible, the constraints of
-      the I-JSON restricted profile <xref
+      implementations to use a variety of available JSON parsers, the
+      JSON encoding rules follow, as much as possible, the constraints
+      of the I-JSON restricted profile <xref
       target="I-D.ietf-json-i-json"/>. Section <xref
       target="sec.i-json"/> discusses I-JSON conformance in more
       detail.</t>
@@ -115,27 +115,27 @@
 
     <section anchor="sec.names-ns" title="Names and Namespaces">
       <t>Instances of YANG data nodes (leafs, containers, leaf-lists,
-      lists and anyxml nodes) are always encoded as members of JSON a
+      lists and anyxml nodes) are always encoded as members of a JSON
       object, i.e., as name/value pairs. This section defines how the
       name part is formed, and the following sections deal with the
       value part.</t>
-      <t>The member name is the same as the identifier of the
-      corresponding YANG data node. Every such name belongs to a
-      namespace which is uniquely identified by the YANG module where
-      the corresponding data node is defined. If the data node is
-      defined in a submodule, then the namespace is determined by the
-      main module to which the submodule belongs.</t>
-      <t>In some situations specified below, the namespace of a member
-      name has to be explicitly specified. In such a case, the module
-      name SHALL be used as a prefix to the (local) member name. Both
-      parts of the member name SHALL be separated with a colon
-      character (":"). In other words, the namespace-qualified name
-      will have the following form:</t>
+      <t>Except in the cases specified below, the member name is
+      identical to the identifier of the corresponding YANG data
+      node. Every such name belongs to a namespace which is associated
+      with the YANG module where the corresponding data node is
+      defined. If the data node is defined in a submodule, then the
+      namespace is determined by the main module to which the
+      submodule belongs.</t>
+      <t>If the namespace of a member name has to be explicitly
+      specified, the module name SHALL be used as a prefix to the
+      (local) member name. Both parts of the member name SHALL be
+      separated with a colon character (":"). In other words, the
+      namespace-qualified name will have the following form:</t>
 
       <figure anchor="fig.ns-enc"
               title="Encoding a namespace identifier with a local name.">
         <artwork>
-    <![CDATA[<module name>:<local name>]]>
+        <![CDATA[<module name>:<local name>]]>
         </artwork>
       </figure>
 
@@ -152,11 +152,11 @@
       following is a valid JSON-encoded configuration:
       <figure>
         <artwork>
-    <![CDATA[{
-      "foomod:top": {
-        "foo": 54
-      }
-    }]]>
+<![CDATA[{
+  "foomod:top": {
+    "foo": 54
+  }
+}]]>
         </artwork>
       </figure>
       </t>
@@ -173,12 +173,12 @@
       then look like this:
       <figure>
         <artwork>
-    <![CDATA[{
-      "foomod:top": {
-        "foo": 54,
-        "barmod:bar": true
-      }
-    }]]>
+<![CDATA[{
+  "foomod:top": {
+    "foo": 54,
+    "barmod:bar": true
+  }
+}]]>
         </artwork>
       </figure>
       </t>
@@ -205,29 +205,29 @@
       the name is formed from the data node identifier using the rules
       of <xref target="sec.names-ns"/>. The value depends on the
       category of the data node as explained in the following
-      sections.</t>
+      subsections.</t>
 
       <section anchor="sec.leaf"
                title='The "leaf" Data Node'>
 
         <t>A leaf instance is encoded as a name/value pair where the
-        value can be a string, number, literal "true" or "false" or
-        the special array "[null]", depending on the type of the leaf
+        value can be a string, number, literal 'true' or 'false' or
+        the special array '[null]', depending on the type of the leaf
         (see <xref target="sec.datatypes"/> for the type encoding
         rules).</t>
 
         <t>Example: For the leaf node definition
         <figure>
           <artwork>
-    <![CDATA[leaf foo {
-      type uint8;
-    }]]>
+<![CDATA[leaf foo {
+  type uint8;
+}]]>
           </artwork>
         </figure>
         the following is a valid JSON-encoded instance:
         <figure>
           <artwork>
-    <![CDATA["foo": 123]]>
+<![CDATA["foo": 123]]>
           </artwork>
         </figure>
         </t>
@@ -243,19 +243,19 @@
         <t>Example: For the container definition
         <figure>
           <artwork>
-    <![CDATA[container bar {
-      leaf foo {
-        type uint8;
-      }
-    }]]>
+<![CDATA[container bar {
+  leaf foo {
+    type uint8;
+  }
+}]]>
           </artwork>
         </figure>
         the following is a valid instance:
         <figure>
           <artwork>
-    <![CDATA["bar": {
-      "foo": 123
-    }]]>
+<![CDATA["bar": {
+  "foo": 123
+}]]>
           </artwork>
         </figure>
         </t>
@@ -270,15 +270,15 @@
         <t>Example: For the leaf-list definition
         <figure>
           <artwork>
-    <![CDATA[leaf-list foo {
-      type uint8;
-    }]]>
+<![CDATA[leaf-list foo {
+  type uint8;
+}]]>
           </artwork>
         </figure>
         the following is a valid instance:
         <figure>
           <artwork>
-    <![CDATA["foo": [123, 0]]]>
+<![CDATA["foo": [123, 0]]]>
           </artwork>
         </figure>
         </t>
@@ -291,37 +291,37 @@
         <t>A list instance is encoded as a name/array pair, and the
         array elements are JSON objects.</t>
         <t>Unlike the XML encoding, where list keys are required to
-        precede any other siblings, in the order specified by the data
-        model, the order of members within a JSON-encode list entry is
-        arbitrary because JSON objects are fundamentally unordered
-        collections of members.</t>
+        precede any other siblings, and to appear in the order
+        specified by the data model, the order of members within a
+        JSON-encoded list entry is arbitrary because JSON objects are
+        fundamentally unordered collections of members.</t>
         <t>Example: For the list definition
         <figure>
           <artwork>
-    <![CDATA[list bar {
-      key foo;
-      leaf foo {
-        type uint8;
-      }
-      leaf baz {
-        type string;
-      }
-    }]]>
+<![CDATA[list bar {
+  key foo;
+  leaf foo {
+    type uint8;
+  }
+  leaf baz {
+    type string;
+  }
+}]]>
           </artwork>
         </figure>
         the following is a valid instance:
         <figure>
           <artwork>
-    <![CDATA["bar": [
-      {
-        "foo": 123,
-        "baz": "zig"
-      },
-      {
-        "foo": 0,
-        "baz": "zag"
-      }
-    ]]]>
+<![CDATA["bar": [
+  {
+    "foo": 123,
+    "baz": "zig"
+  },
+  {
+    "baz": "zag",
+    "foo": 0
+  }
+]]]>
           </artwork>
         </figure>
         </t>
@@ -331,8 +331,8 @@
                title='The "anyxml" Data Node'>
         <t>An anyxml instance is translated to a name/value pair. The
         value can be of any valid JSON type, i.e. an object, array,
-        number, string or any of the literals "true", "false" and
-        "null".</t>
+        number, string or any of the literals 'true', 'false' and
+        'null'.</t>
         <t>This document defines no mapping between the contents of
         JSON- and XML-encoded anyxml instances. It is not necessary
         because anyxml contents are not subject to YANG-based
@@ -340,13 +340,13 @@
         <t>Example: For the anyxml definition
         <figure>
           <artwork>
-    <![CDATA[anyxml bar;]]>
+<![CDATA[anyxml bar;]]>
           </artwork>
         </figure>
         the following is a valid instance:
         <figure>
           <artwork>
-    <![CDATA["bar": [true, null, true]}]]>
+<![CDATA["bar": [true, null, true]]]>
           </artwork>
         </figure>
         </t>
@@ -357,8 +357,8 @@
     <section anchor="sec.datatypes"
              title="The Mapping of YANG Datatypes to JSON Values">
 
-      <t>The type of the JSON value in an instance of the leaf and leaf-list
-      data node depend on the datatype of that data node as specified
+      <t>The type of the JSON value in an instance of the leaf or leaf-list
+      data node depends on the datatype of that data node as specified
       in the following subsections.</t>
 
       <section anchor="sec.numtypes" title="Numeric Datatypes">
@@ -368,12 +368,12 @@
         encoded as a JSON string whose contents is the lexical
         representation of that numeric value as specified in sections
         9.2.1 and 9.3.1 of <xref target="RFC6020"/>.</t>
-        <t>For example, if the type of leaf "foo" in <xref
-        target="sec.leaf"/> was "unit64" instead of "uint8", the instance
-        would have to be encoded as</t>
+        <t>For example, if the type of the leaf "foo" in <xref
+        target="sec.leaf"/> was "unit64" instead of "uint8", the
+        instance would have to be encoded as</t>
         <figure>
           <artwork>
-    <![CDATA["foo": "123"]]>
+<![CDATA["foo": "123"]]>
           </artwork>
         </figure>
         <t>The special handling of 64-bit numbers follows from I-JSON
@@ -388,8 +388,8 @@
       </section>
 
       <section anchor="sec.boolean" title='The "boolean" Type'>
-        <t>A "boolean" value is mapped to the corresponding JSON value
-        "true" or "false".</t>
+        <t>A "boolean" value is mapped to the corresponding JSON
+        literal name 'true' or 'false'.</t>
       </section>
 
       <section anchor="sec.enum" title='The "enumeration" Type'>
@@ -419,64 +419,64 @@
       </section>
 
       <section anchor="sec.idref" title='The "identityref" Type'>
-        <t>An "identityref" value is mapped to a string representing the
-        qualified name of the identity. Its namespace MUST be expressed
-        as shown in <xref target="fig.ns-enc"/> if it is different
-        from the namespace of the leaf node containing the identityref
+        <t>An "identityref" value is mapped to a string representing
+        the name of an identity. Its namespace MUST be expressed as
+        shown in <xref target="fig.ns-enc"/> if it is different from
+        the namespace of the leaf node containing the identityref
         value, and MAY be expressed otherwise.</t>
         <t>For example, consider the following schematic module:</t>
         <figure>
           <artwork>
-    <![CDATA[module exmod {
-      ...
-      import ietf-interfaces {
-        prefix if;
-      }
-      import iana-if-type {
-        prefix ianaift;
-      }
-      ...
-      leaf type {
-        type identityref {
-          base "if:interface-type";
-        }
-      }
-    }]]>
+<![CDATA[module exmod {
+  ...
+  import ietf-interfaces {
+    prefix if;
+  }
+  import iana-if-type {
+    prefix ianaift;
+  }
+  ...
+  leaf type {
+    type identityref {
+      base "if:interface-type";
+    }
+  }
+}]]>
           </artwork>
         </figure>
         <t>A valid instance of the "type" leaf is then encoded as
         follows:
         <figure>
           <artwork>
-    <![CDATA["type": "iana-if-type:ethernetCsmacd"]]>
+<![CDATA["type": "iana-if-type:ethernetCsmacd"]]>
           </artwork>
         </figure>
         </t>
-        <t>Node that the namespace identifier "iana-if-type" must be
-        present in this case because the "ethernetCsmacd" identity is
-        not defined in the same module as the "type" leaf.</t>
+        <t>The namespace identifier "iana-if-type" must be present in
+        this case because the "ethernetCsmacd" identity is not defined
+        in the same module as the "type" leaf.</t>
       </section>
 
       <section anchor="sec.empty" title='The "empty" Type'>
-        <t>An "empty" value is mapped to "[null]", i.e., an array with
-        the "null" value being its only element.</t>
-        <t>This encoding was chosen instead of using simply "null" in
+        <t>An "empty" value is mapped to '[null]', i.e., an array with
+        the 'null' literal being its only element.</t>
+        <t>This encoding was chosen instead of using simply 'null' in
         order to facilitate the use of empty leafs in common
         programming languages. When used in a boolean context, the
-        "[null]" value, unlike "null", evaluates to "true".</t>
+        '[null]' value, unlike 'null', evaluates to true.</t>
 
         <t>Example: For the leaf definition
         <figure>
           <artwork>
-    <![CDATA[leaf foo {
-      type empty;
-    }]]>
+<![CDATA[leaf foo {
+  type empty;
+}]]>
           </artwork>
         </figure>
         a valid instance is
         <figure>
           <artwork>
-    <![CDATA["foo": [null]]]>
+<![CDATA["foo": [null]]]>
           </artwork>
         </figure>
         </t>
@@ -492,21 +492,20 @@
         <t>For example, consider the following YANG definition:
         <figure>
           <artwork>
-    <![CDATA[leaf bar {
-      type union {
-        type uint16;
-        type string;
-      }
-    }]]>
+<![CDATA[leaf bar {
+  type union {
+    type uint16;
+    type string;
+  }
+}]]>
           </artwork>
         </figure>
         In RESTCONF <xref target="I-D.ietf-netconf-restconf"/>, it is
-        then fully acceptable to set the value of "bar" in the
-        following way when using the "application/yang.data+xml" media
-        type:
+        fully acceptable to set the value of "bar" in the following
+        way when using the "application/yang.data+xml" media type:
         <figure>
           <artwork>
-    <![CDATA[<bar>13.5</bar>]]>
+<![CDATA[<bar>13.5</bar>]]>
           </artwork>
         </figure>
         because the value may be interpreted as a string, i.e., the
@@ -514,7 +513,7 @@
         "application/yang.data+json" media type, however, this is an error:
         <figure>
           <artwork>
-    <![CDATA["bar": 13.5]]>
+<![CDATA["bar": 13.5]]>
           </artwork>
         </figure>
         In this case, the JSON encoding indicates the value is
@@ -531,22 +530,22 @@
         the corresponding module names according to the rules of <xref
         target="sec.names-ns"/>.</t>
         <t>Conversely, when translating such a value from JSON to XML,
-        the namespace identifier (YANG module name) in each component of
-        the instance-identifier MUST be replaced by the XML
-        namespace prefix that is associated with namespace URI
+        the namespace identifier (YANG module name) in each component
+        of the instance-identifier MUST be replaced by the XML
+        namespace prefix that is associated with the namespace URI
         reference of the module.</t>
         <t>For example, assume "ex" is the prefix associated with the
         namespace URI that is defined in the "example" module. Then
         the XML-encoded instance-identifier
         <figure>
           <artwork>
-            /ex:system/ex:user[ex:name='fred']
+/ex:system/ex:user[ex:name='fred']
           </artwork>
         </figure>
         corresponds to the following JSON-encoded instance-identifier:
         <figure>
           <artwork>
-            /example:system/example:user[example:name='fred']
+/example:system/example:user[example:name='fred']
           </artwork>
         </figure>
         </t>
@@ -563,26 +562,26 @@
       requirements and recommendations as closely as possible.</t>
       <t>In particular, the following properties are guaranteed:
       <list style="symbols">
-	<t>Character encoding is UTF-8.</t>
-	<t>Member names within the same JSON object are always unique.</t>
-	<t>The order of JSON object members is never relied upon.</t>
-	<t>Numbers of any type supported by YANG can be exchanged
-	reliably. See <xref target="sec.numtypes"/> for details.</t>
+        <t>Character encoding is UTF-8.</t>
+        <t>Member names within the same JSON object are always unique.</t>
+        <t>The order of JSON object members is never relied upon.</t>
+        <t>Numbers of any type supported by YANG can be exchanged
+        reliably. See <xref target="sec.numtypes"/> for details.</t>
       </list>
       </t>
-      <t>The only two cases where JSON instance document encoded
+      <t>The only two cases where a JSON instance document encoded
       according to this document may deviate from I-JSON were dictated
-      by the need to be able to encode the same instance data in JSON
-      as in XML. They are:
+      by the need to be able to encode the same instance data in both JSON
+      and XML. These two exceptions are:
       <list style="symbols">
-	<t>Leaf values encoded as strings may contain code points
-	identifying Noncharacters that belong to the XML character set
-	(see sec. 2.2 in <xref target="W3C.REC-xml-20081126"/>).</t>
-	<t>Values of the "binary" type are encoded with the base64
-	encoding scheme (see sec. 9.8.2 in <xref target="RFC6020"/>
-	whereas I-JSON recommends base64url instead. However, the use
-	of base64 should never cause interoperability problems because
-	these values never appear in an URL.</t>
+        <t>Leaf values encoded as strings may contain code points
+        identifying Noncharacters that belong to the XML character set
+        (see sec. 2.2 in <xref target="W3C.REC-xml-20081126"/>).</t>
+        <t>Values of the "binary" type are encoded with the base64
+        encoding scheme (see sec. 9.8.2 in <xref target="RFC6020"/>)
+        whereas I-JSON recommends base64url instead. However, the use
+        of base64 should not cause any interoperability problems
+        because these values never appear in an URL.</t>
       </list>
       </t>
     </section>
@@ -601,7 +600,7 @@
       that violate any of I-JSON strict constraints MUST NOT be
       trusted nor acted upon. Violations due to the presence of
       Unicode Noncharacters in the data exceptions (see <xref
-      target="sec-i-json"/>) SHOULD be carefuly examined.</t>
+      target="sec.i-json"/>) SHOULD be carefully examined.</t>
     </section>
 
     <section anchor="sec.ack" title="Acknowledgments">
@@ -621,7 +620,6 @@
       &RFC6020;
       &RFC6241;
       &W3C.REC-xml-20081126;
-      &W3C.REC-xml-names-20091208;
     </references>
 
     <references title="Informative References">
@@ -648,25 +646,29 @@
     </section>
 
     <section title="Change Log">
+
+      &ed-hint-remove-sec;
       
       <section title="Changes Between Revisions -00 and -01">
-	<t>
-	  <list style="symbols">
-	    <t>JSON encoding is now defined directly rather than via
-	    XML-JSON mapping.</t>
-	    <t>The rules for namespace encoding has changed. This
-	    affect both node instance names and
-	    instance-identifiers.</t>
-	    <t>I-JSON-related changes. The most significant is the
-	    string encoding of 64-bit numbers.</t>
-	    <t>When validating union type, the partial type info
-	    present in JSON encoding is taken into account.</t>
-	    <t>Added section about I-JSON compliance.</t>
-	    <t>Updated the example in appandix.</t>
-	    <t>Wrote Security Considerations.</t>
-	    <t>Removed IANA Considerations as there are none.</t>
-	  </list>
-	</t>
+        <t>
+          <list style="symbols">
+	    <t>Metadata encoding was moved to a separate I-D,
+	    draft-lhotka-netmod-yang-metadata.</t>
+            <t>JSON encoding is now defined directly rather than via
+            XML-JSON mapping.</t>
+            <t>The rules for namespace encoding has changed. This
+            affect both node instance names and
+            instance-identifiers.</t>
+            <t>I-JSON-related changes. The most significant is the
+            string encoding of 64-bit numbers.</t>
+            <t>When validating union type, the partial type info
+            present in JSON encoding is taken into account.</t>
+            <t>Added section about I-JSON compliance.</t>
+            <t>Updated the example in appendix.</t>
+            <t>Wrote Security Considerations.</t>
+            <t>Removed IANA Considerations as there are none.</t>
+          </list>
+        </t>
       </section>
 
     </section>
