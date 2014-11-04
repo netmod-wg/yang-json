@@ -328,7 +328,7 @@
       </section>
       <section anchor="sec.anyxml"
                title='The "anyxml" Data Node'>
-        <t>An anyxml instance is translated to a name/value pair. The
+        <t>An anyxml instance is encoded as a name/value pair. The
         value can be of any valid JSON type, i.e. an object, array,
         number, string or any of the literals 'true', 'false' and
         'null'.</t>
