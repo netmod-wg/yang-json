@@ -189,7 +189,7 @@
       encoding values of the "identityref" and "instances-identifier"
       types. The same form as shown in <xref target="fig.ns-enc"/> is
       then used as well. See Sections <xref format="counter"
-      target="sec.idref"/> and <xref format="counter"
+      target="sec.idref"/> and <xref format="counter"
       target="sec.i-i"/> for details.</t>
     </section>
 
@@ -211,8 +211,8 @@
                title='The "leaf" Data Node'>
 
         <t>A leaf instance is encoded as a name/value pair where the
-        value can be a string, number, literal 'true' or 'false' or
-        the special array '[null]', depending on the type of the leaf
+        value can be a string, number, literal "true" or "false", or
+        the special array "[null]", depending on the type of the leaf
         (see <xref target="sec.datatypes"/> for the type encoding
         rules).</t>
         <t>Example: For the leaf node definition
@@ -264,8 +264,13 @@
                title='The "leaf-list" Data Node'>
 
         <t>A leaf-list is encoded as a name/array pair, and the array
-        elements are values whose type depends on the datatype of the
-        leaf-list (see <xref target="sec.datatypes"/>).</t>
+        elements are values of the same type, which can be a string,
+        number, literal "true" or "false", or the special array
+        "[null]", depending on the type of the leaf-list (see <xref
+        target="sec.datatypes"/> for the type encoding rules).</t>
+	<t>The order of array elements MUST be the same as the order
+	of XML elements representing leaf-list entries in the XML
+	encoding.</t>
         <t>Example: For the leaf-list definition
         <figure>
           <artwork>
@@ -281,7 +286,6 @@
           </artwork>
         </figure>
         </t>
-
       </section>
 
       <section anchor="sec.list"
@@ -289,6 +293,9 @@
         
         <t>A list instance is encoded as a name/array pair, and the
         array elements are JSON objects.</t>
+	<t>The order of array elements MUST be the same as the order
+	of XML elements representing list entries in the XML
+	encoding.</t>
         <t>Unlike the XML encoding, where list keys are required to
         precede any other siblings, and to appear in the order
         specified by the data model, the order of members within a
@@ -317,8 +324,8 @@
     "baz": "zig"
   },
   {
-    "baz": "zag",
-    "foo": 0
+    "foo": 0,
+    "baz": "zag"
   }
 ]]]>
           </artwork>
@@ -330,12 +337,14 @@
                title='The "anyxml" Data Node'>
         <t>An anyxml instance is encoded as a name/value pair. The
         value can be of any valid JSON type, i.e. an object, array,
-        number, string or any of the literals 'true', 'false' and
-        'null'.</t>
+        number, string or one of the literals "true", "false" and
+        "null".</t>
         <t>This document defines no mapping between the contents of
-        JSON- and XML-encoded anyxml instances. It is not necessary
-        because anyxml contents are not subject to YANG-based
-        validation (see sec. 7.10 in <xref target="RFC6020"/>).</t>
+        JSON- and XML-encoded anyxml instances. Note that the mapping
+        is not needed for the purposes of validation (<xref
+        target="sec.valid"/>) because anyxml contents are not subject
+        to YANG-based validation (see sec. 7.10 in <xref
+        target="RFC6020"/>).</t>
         <t>Example: For the anyxml definition
         <figure>
           <artwork>
@@ -354,13 +363,13 @@
     </section>
 
     <section anchor="sec.datatypes"
-             title="The Mapping of YANG Datatypes to JSON Values">
+             title="The Mapping of YANG Data Types to JSON Values">
 
-      <t>The type of the JSON value in an instance of the leaf or leaf-list
-      data node depends on the datatype of that data node as specified
-      in the following subsections.</t>
+      <t>The type of the JSON value in an instance of the leaf or
+      leaf-list data node depends on the type of that data node as
+      specified in the following subsections.</t>
 
-      <section anchor="sec.numtypes" title="Numeric Datatypes">
+      <section anchor="sec.numtypes" title="Numeric Types">
         <t>A value of the "int8", "int16", "int32", "uint8", "uint16"
 	and "uint32" is represented as a JSON number.</t>
         <t>A value of the "int64", "uint64" or "decimal64" type is
@@ -388,7 +397,7 @@
 
       <section anchor="sec.boolean" title='The "boolean" Type'>
         <t>A "boolean" value is mapped to the corresponding JSON
-        literal name 'true' or 'false'.</t>
+        literal name "true" or "false".</t>
       </section>
 
       <section anchor="sec.enum" title='The "enumeration" Type'>
@@ -457,12 +466,12 @@
       </section>
 
       <section anchor="sec.empty" title='The "empty" Type'>
-        <t>An "empty" value is mapped to '[null]', i.e., an array with
-        the 'null' literal being its only element.</t>
-        <t>This encoding was chosen instead of using simply 'null' in
+        <t>An "empty" value is mapped to "[null]", i.e., an array with
+        the "null" literal being its only element.</t>
+        <t>This encoding was chosen instead of using simply "null" in
         order to facilitate the use of empty leafs in common
         programming languages. When used in a boolean context, the
-        '[null]' value, unlike 'null', evaluates to true.</t>
+        "[null]" value, unlike "null", evaluates to true.</t>
 
         <t>Example: For the leaf definition
         <figure>
@@ -523,31 +532,37 @@
       <section anchor="sec.i-i" title='The "instance-identifier" Type'>
         <t>An "instance-identifier" value is encoded as a string that
         is analogical to the lexical representation in XML encoding,
-        see sec. 9.13.3 in <xref target="RFC6020"/>. The only
-        difference is that XML namespace prefixes used for qualifying
-        node names in the instance-identifier value are replaced by
-        the corresponding module names according to the rules of <xref
-        target="sec.names-ns"/>.</t>
-        <t>Conversely, when translating such a value from JSON to XML,
-        the namespace identifier (YANG module name) in each component
-        of the instance-identifier MUST be replaced by the XML
-        namespace prefix that is associated with the namespace URI
-        reference of the module.</t>
-        <t>For example, assume "ex" is the prefix associated with the
-        namespace URI that is defined in the "example" module. Then
-        the XML-encoded instance-identifier
-        <figure>
-          <artwork>
-/ex:system/ex:user[ex:name='fred']
-          </artwork>
-        </figure>
-        corresponds to the following JSON-encoded instance-identifier:
-        <figure>
-          <artwork>
-/example:system/example:user[example:name='fred']
-          </artwork>
-        </figure>
-        </t>
+        see sec. 9.13.3 in <xref target="RFC6020"/>. However,
+	the encoding of namespaces in instance-identifier values
+	follows the rules stated in <xref target="sec.names-ns"/>,
+	namely:
+	<list style="symbols">
+	  <t>The namespace identifier is the module name where each
+	  data node is defined.</t>
+	  <t>The encoding of a node name with an explicit namespace is
+	  as shown in <xref target="fig.ns-enc"/>.</t>
+	  <t>The leftmost (top-level) node name is always prefixed
+	  with the namespace identifier.</t>
+	  <t>Any subsequent node name has the namespace identifier if
+	  and only if its parent node has a different namespace. This
+	  also holds for node names appearing in predicates.</t>
+	</list></t>
+	<t>For example,
+	<figure>
+	  <artwork>
+/ietf-interfaces:interfaces/interface[name='eth0']/ietf-ip:ipv4/ip
+	  </artwork>
+	</figure>
+	is a valid instance-identifer value because the data nodes
+	"interfaces", "interface" and "name" are defined in the module
+	"ietf-interfaces", whereas "ipv4" and "ip" are defined in
+	"ietf-ip".</t>
+        <t>When translating an instance-identifier value from JSON to
+        XML, the namespace identifier (YANG module name) in each
+        component of the instance-identifier MUST be replaced by an
+        XML namespace prefix that is associated with the namespace URI
+        reference of the module in the scope of the element containing
+	the instance-identifier value.</t>
       </section>
 
     </section>
@@ -575,12 +590,16 @@
       <list style="symbols">
         <t>Leaf values encoded as strings may contain code points
         identifying Noncharacters that belong to the XML character set
-        (see sec. 2.2 in <xref target="W3C.REC-xml-20081126"/>).</t>
+        (see sec. 2.2 in <xref target="W3C.REC-xml-20081126"/>). This
+        issue is likely to be solved in YANG 1.1 because noncharacters
+        will not be allowed in string values, see sec. 9.4 in <xref
+        target="I-D.ietf-netmod-rfc6020bis"/>.</t>
         <t>Values of the "binary" type are encoded with the base64
-        encoding scheme (see sec. 9.8.2 in <xref target="RFC6020"/>)
-        whereas I-JSON recommends base64url instead. However, the use
-        of base64 should not cause any interoperability problems
-        because these values never appear in an URL.</t>
+        encoding scheme (<xref target="sec.binary"/>), whereas I-JSON
+        recommends base64url instead. Theoretically, values of the
+        "binary" type might appear in URI references, such as
+        Request-URI in RESTCONF, although in practice the cases where
+        it is really needed should be extremely rare.</t>
       </list>
       </t>
     </section>
@@ -598,14 +617,14 @@
       target="I-D.ietf-json-i-json"/>. That is, any received JSON data
       that violate any of I-JSON strict constraints MUST NOT be
       trusted nor acted upon. Violations due to the presence of
-      Unicode Noncharacters in the data exceptions (see <xref
+      Unicode Noncharacters in the data (see <xref
       target="sec.i-json"/>) SHOULD be carefully examined.</t>
     </section>
 
     <section anchor="sec.ack" title="Acknowledgments">
       <t>The author wishes to thank Andy Bierman, Martin Bjorklund,
-      Juergen Schoenwaelder and Phil Shafer for their helpful comments
-      and suggestions.</t>
+      Balazs Lengyel, Juergen Schoenwaelder and Phil Shafer for their
+      helpful comments and suggestions.</t>
     </section>
 
   </middle>
@@ -625,6 +644,7 @@
       &RFC7223;
       &W3C.REC-xpath-19991116;
       &I-D.ietf-netconf-restconf;
+      &I-D.ietf-netmod-rfc6020bis;
     </references>
 
     <section anchor="app.ex-if"
@@ -647,6 +667,16 @@
     <section title="Change Log">
 
       &ed-hint-remove-sec;
+      
+      <section title="Changes Between Revisions -01 and -02">
+        <t>
+          <list style="symbols">
+	    <t>Encoding of namespaces in instance-identifiers was changed.</t>
+	    <t>Text specifying the order of array elements in
+	    leaf-list and list instances was added.</t>
+	  </list>
+	</t>
+      </section>
       
       <section title="Changes Between Revisions -00 and -01">
         <t>
