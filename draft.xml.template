@@ -2,8 +2,7 @@
 <!DOCTYPE rfc SYSTEM ".tools/schema/rfc2629.dtd" [
 <!ENTITY % COMMON SYSTEM ".tools/bplate/common.ent">
 %COMMON;
-<!-- Replace with actual working group -->
-<!ENTITY % WG SYSTEM ".tools/bplate/netmod.ent">
+<!ENTITY % WG SYSTEM ".tools/bplate/ietf-wg.ent">
 %WG;
 <!ENTITY % stdrefs SYSTEM "stdrefs.ent">
 %stdrefs;
@@ -32,7 +31,7 @@
     </author>
     <date year="YYYY-MM-DD"/>
     <area/>
-    &wg;
+    &netmod-wg; 		<!--or another WG -->
 
     <abstract>
       <t></t>

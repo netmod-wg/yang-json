@@ -194,7 +194,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
   </xsl:template>
 
   <xsl:template name="keyword">
-    <xsl:if test="count(ancestor::yin:*)=1">
+    <xsl:if test="count(ancestor::*)=1">
       <xsl:text>&#xA;</xsl:text>
     </xsl:if>
     <xsl:call-template name="indent"/>
@@ -577,6 +577,21 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
     <xsl:text>/*</xsl:text>
     <xsl:value-of select="."/>
     <xsl:text>*/&#xA;</xsl:text>
+  </xsl:template>
+
+  <!-- Extension -->
+  <xsl:template match="*">
+    <xsl:if test="count(ancestor::*)=1">
+      <xsl:text>&#xA;</xsl:text>
+    </xsl:if>
+    <xsl:call-template name="indent"/>
+    <xsl:value-of select="name(.)"/>
+    <xsl:text> "</xsl:text>
+    <xsl:call-template name="escape-text">
+      <xsl:with-param name="text" select="@*"/>
+    </xsl:call-template>
+    <xsl:text>"</xsl:text>
+    <xsl:call-template name="semi-or-sub"/>
   </xsl:template>
 
 </xsl:stylesheet>
