@@ -72,7 +72,7 @@ endif
 ietf-%.yang.aw: ietf-%.yang
 	@pyang $(PYANG_OPTS) --ietf $<
 	@echo '<artwork>' > $@
-	@echo '<![CDATA[<CODE BEGINS> file '"\"$*@$(DATE).yang\"" >> $@
+	@echo '<![CDATA[<CODE BEGINS> file '"\"ietf-$*@$(DATE).yang\"" >> $@
 	@echo >> $@
 	@cat $< >> $@
 	@echo >> $@
