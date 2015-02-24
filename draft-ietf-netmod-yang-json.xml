@@ -63,7 +63,7 @@
       implementations to use a variety of available JSON parsers, the
       JSON encoding rules follow, as much as possible, the constraints
       of the I-JSON restricted profile <xref
-      target="I-D.ietf-json-i-json"/>. Section <xref
+      target="I-D.ietf-json-i-json"/>. <xref
       target="sec.i-json"/> discusses I-JSON conformance in more
       detail.</t>
     </section>
@@ -99,10 +99,10 @@
       one, semantic constraints in "must" statements are expressed
       using XPath 1.0 <xref target="W3C.REC-xpath-19991116"/>, which
       can be properly interpreted only in the XML context.</t>
-      <t>This document along with the corresponding "XML Mapping
-      Rules" sections from <xref target="RFC6020"/> also define an
-      implicit schema-driven mapping of JSON-encoded instances to
-      XML-encoded instances (and vice versa). This mapping is mostly
+      <t>This document and the corresponding "XML Mapping Rules"
+      sections from <xref target="RFC6020"/> also define an implicit
+      schema-driven mapping of JSON-encoded instances to XML-encoded
+      instances (and vice versa). This mapping is mostly
       straightforward. In cases where doubts could arise, this
       document gives explicit instructions for mapping JSON-encoded
       instances to XML.</t>
@@ -267,9 +267,10 @@
         number, literal "true" or "false", or the special array
         "[null]", depending on the type of the leaf-list (see <xref
         target="sec.datatypes"/> for the type encoding rules).</t>
-	<t>The order of array elements MUST be the same as the order
-	of XML elements representing leaf-list entries in the XML
-	encoding.</t>
+	<t>The ordering of array elements follows the same rules as
+	the ordering of XML elements representing leaf-list entries in
+	the XML encoding. Specifically, the "ordered-by" properties
+	(sec. 7.7.5 in <xref target="RFC6020"/>) MUST be observed.</t>
         <t>Example: For the leaf-list definition
         <figure>
           <artwork>
@@ -292,14 +293,15 @@
         
         <t>A list instance is encoded as a name/array pair, and the
         array elements are JSON objects.</t>
-	<t>The order of array elements MUST be the same as the order
-	of XML elements representing list entries in the XML
-	encoding.</t>
+	<t>The ordering of array elements follows the same rules as
+	the ordering of XML elements representing list entries in the
+	XML encoding. Specifically, the "ordered-by" properties
+	(sec. 7.7.5 in <xref target="RFC6020"/>) MUST be observed.</t>
         <t>Unlike the XML encoding, where list keys are required to
-        precede any other siblings, and to appear in the order
-        specified by the data model, the order of members within a
-        JSON-encoded list entry is arbitrary because JSON objects are
-        fundamentally unordered collections of members.</t>
+        precede any other siblings within a list entry, and appear in
+        the order specified by the data model, the order of members in
+        a JSON-encoded list entry is arbitrary because JSON objects
+        are fundamentally unordered collections of members.</t>
         <t>Example: For the list definition
         <figure>
           <artwork>
@@ -323,8 +325,8 @@
     "baz": "zig"
   },
   {
-    "foo": 0,
-    "baz": "zag"
+    "baz": "zag",
+    "foo": 0
   }
 ]]]>
           </artwork>
@@ -389,14 +391,14 @@
           </artwork>
         </figure>
         <t>The special handling of 64-bit numbers follows from I-JSON
-        recommendation to encode numbers exceeding the IEEE 754-2000
+        recommendation to encode numbers exceeding the IEEE 754-2008
         double precision range as strings, see sec. 2.2 in <xref
         target="I-D.ietf-json-i-json"/>.</t>
       </section>
 
       <section anchor="sec.string" title='The "string" Type'>
         <t>A "string" value encoded as a JSON string, subject to JSON
-        encoding rules.</t>
+        string encoding rules.</t>
       </section>
 
       <section anchor="sec.boolean" title='The "boolean" Type'>
@@ -529,7 +531,7 @@
           </artwork>
         </figure>
         In this case, the JSON encoding indicates the value is
-        supposed to be a number rather than string.
+        supposed to be a number rather than a string.
         </t>
       </section>
 
@@ -618,7 +620,7 @@
       counterparts. To minimize these security risks, it is important
       that client and server software supporting JSON encoding behaves
       as required in sec. 3 of <xref
-      target="I-D.ietf-json-i-json"/>. That is, any received JSON data
+      target="I-D.ietf-json-i-json"/>. That is, received JSON data
       that violate any of I-JSON strict constraints MUST NOT be
       trusted nor acted upon. Violations due to the presence of
       Unicode Noncharacters in the data (see <xref
@@ -627,8 +629,8 @@
 
     <section anchor="sec.ack" title="Acknowledgments">
       <t>The author wishes to thank Andy Bierman, Martin Bjorklund,
-      Balazs Lengyel, Juergen Schoenwaelder and Phil Shafer for their
-      helpful comments and suggestions.</t>
+      Dean Bogdanovic, Balazs Lengyel, Juergen Schoenwaelder and Phil
+      Shafer for their helpful comments and suggestions.</t>
     </section>
 
   </middle>
