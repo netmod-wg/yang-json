@@ -674,6 +674,18 @@
 
       &ed-hint-remove-sec;
       
+      <section title="Changes Between Revisions -02 and -03">
+        <t>
+          <list style="symbols">
+	    <t>Namespace encoding is defined without using RFC 2119
+	    keywords.</t>
+	    <t>Specification for anyxml nodes was extended and
+	    clarified.</t>
+	    <t>Text about ordering of list entries was corrected.</t>
+	  </list>
+	</t>
+      </section>
+      
       <section title="Changes Between Revisions -01 and -02">
         <t>
           <list style="symbols">
