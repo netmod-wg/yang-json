@@ -140,10 +140,9 @@
       </figure>
 
       <t>Names with namespace identifiers in the form shown in <xref
-      target="fig.ns-enc"/> MUST be used for all top-level YANG data
-      nodes, and also for all nodes whose parent node belongs to a
-      different namespace. Otherwise, names with namespace identifiers
-      MUST NOT be used.</t>
+      target="fig.ns-enc"/> are used if and only if the parent data
+      node belongs to a different namespace, which also includes all
+      top-level YANG data nodes.</t>
       <t>For example, consider the following YANG module:
       <figure>
         &foomod.yang;
@@ -182,9 +181,9 @@
         </artwork>
       </figure>
       </t>
-      <t>The name of the "bar" leaf must be prefixed with the
-      namespace identifier because its parent is defined in a
-      different module, hence it belongs to another namespace.</t>
+      <t>The name of the "bar" leaf is prefixed with the namespace
+      identifier because its parent is defined in a different module,
+      hence it belongs to another namespace.</t>
       <t>Explicit namespace identifiers are sometimes needed when
       encoding values of the "identityref" and "instances-identifier"
       types. The same form as shown in <xref target="fig.ns-enc"/> is
@@ -339,12 +338,17 @@
         value can be of any valid JSON type, i.e. an object, array,
         number, string or one of the literals "true", "false" and
         "null".</t>
-        <t>This document defines no mapping between the contents of
-        JSON- and XML-encoded anyxml instances. Note that the mapping
-        is not needed for the purposes of validation (<xref
+        <t>This document imposes no other restrictions on the contents
+        of JSON-encoded anyxml instances. It also doesn't define any
+        universal mapping between the contents of JSON- and
+        XML-encoded anyxml instances - note that such a mapping is not
+        needed for the purposes of validation (<xref
         target="sec.valid"/>) because anyxml contents are not subject
         to YANG-based validation (see sec. 7.10 in <xref
-        target="RFC6020"/>).</t>
+        target="RFC6020"/>). However, each definition of an anyxml
+        node MAY specify, in its "description" statement, appropriate
+        syntactic, semantic and mapping rules for the values of that
+        anyxml data node.</t>
         <t>Example: For the anyxml definition
         <figure>
           <artwork>
