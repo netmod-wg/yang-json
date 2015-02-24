@@ -2,7 +2,7 @@
 <!DOCTYPE rfc SYSTEM '.tools/schema/rfc2629.dtd' [
 <!ENTITY % COMMON SYSTEM ".tools/bplate/common.ent">
 %COMMON;
-<!ENTITY % WG SYSTEM ".tools/bplate/netmod.ent">
+<!ENTITY % WG SYSTEM ".tools/bplate/ietf-wg.ent">
 %WG;
 <!ENTITY % stdrefs SYSTEM "stdrefs.ent">
 %stdrefs;
@@ -31,7 +31,7 @@
     </author>
     <date day="23" month="September" year="2013"/>
     <area>Operations and Management</area>
-    &wg;
+    &netmod-wg;
     <abstract>
       <t>This document defines encoding rules for representing
       configuration, state data, RPC input and output parameters, and
