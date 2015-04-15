@@ -43,8 +43,15 @@ be included in other YANG modules via XInclude.
 	(http://trustee.ietf.org/license-info).
       </h:p>
       <h:p>
-	This version of this YANG module is part of RFC XXXX; see the
-	RFC itself for full legal notices.
+	The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL
+	NOT', 'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'MAY', and
+	'OPTIONAL' in this document are to be interpreted as described
+	in RFC 2119 (http://tools.ietf.org/html/rfc2119).
+      </h:p>
+      <h:p>
+	This version of this YANG module is part of RFC XXXX
+	(http://tools.ietf.org/html/rfcXXXX); see the RFC itself for
+	full legal notices.
       </h:p>
     </text>
   </description>
