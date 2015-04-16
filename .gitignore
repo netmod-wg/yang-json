@@ -10,3 +10,4 @@ ex-get-reply.json
 *.rn[gc]
 *.sch
 *.dsrl
+*.yang
