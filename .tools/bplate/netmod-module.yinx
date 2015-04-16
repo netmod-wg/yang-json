@@ -45,8 +45,8 @@ be included in other YANG modules via XInclude.
       <h:p>
 	The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL
 	NOT', 'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'MAY', and
-	'OPTIONAL' in this document are to be interpreted as described
-	in RFC 2119 (http://tools.ietf.org/html/rfc2119).
+	'OPTIONAL' in the module text are to be interpreted as
+	described in RFC 2119 (http://tools.ietf.org/html/rfc2119).
       </h:p>
       <h:p>
 	This version of this YANG module is part of RFC XXXX
