@@ -47,18 +47,19 @@
       target="W3C.REC-xml-20081126"/> for encoding data in its Content
       Layer. Other management protocols might want to use other
       encodings while still benefiting from using YANG <xref
-      target="RFC6020"/> as the data modeling language.</t>
+      target="I-D.ietf-netmod-rfc6020bis"/> as the data modeling
+      language.</t>
       <t>For example, the RESTCONF protocol <xref
       target="I-D.ietf-netconf-restconf"/> supports two encodings: XML
       (media type "application/yang.data+xml") and JSON (media type
       "application/yang.data+json).</t>
       <t>The specification of the YANG data modelling language <xref
-      target="RFC6020"/> defines only XML encoding for data instances,
-      i.e. contents of configuration datastores, state data, RFC input
-      and output parameters, and event notifications. The aim of this
-      document is to define rules for encoding the same data as
-      JavaScript Object Notation (JSON) text <xref
-      target="RFC7159"/>.</t>
+      target="I-D.ietf-netmod-rfc6020bis"/> defines only XML encoding
+      for data instances, i.e. contents of configuration datastores,
+      state data, RFC input and output parameters, and event
+      notifications. The aim of this document is to define rules for
+      encoding the same data as JavaScript Object Notation (JSON)
+      text <xref target="RFC7159"/>.</t>
       <t>In order to achieve maximum interoperability while allowing
       implementations to use a variety of available JSON parsers, the
       JSON encoding rules follow, as much as possible, the constraints
@@ -75,19 +76,21 @@
       in this document are to be interpreted as described in <xref
       target="RFC2119"/>.</t>
 
-      <t>The following terms are defined in <xref target="RFC6020"/>:
+      <t>The following terms are defined in <xref
+      target="I-D.ietf-netmod-rfc6020bis"/>:
       <list style="symbols">
-        <t>anyxml</t>
-        <t>augment</t>
-        <t>container</t>
-        <t>data node</t>
-        <t>identity</t>
-        <t>instance identifier</t>
-        <t>leaf</t>
-        <t>leaf-list</t>
-        <t>list</t>
-        <t>module</t>
-        <t>submodule</t>
+	<t>anydata,</t>
+        <t>anyxml,</t>
+        <t>augment,</t>
+        <t>container,</t>
+        <t>data node,</t>
+        <t>identity,</t>
+        <t>instance identifier,</t>
+        <t>leaf,</t>
+        <t>leaf-list,</t>
+        <t>list,</t>
+        <t>module,</t>
+        <t>submodule.</t>
       </list></t>
 
     </section>
@@ -95,22 +98,23 @@
     <section anchor="sec.valid" title="Validation of JSON-encoded
                                        Instance Data">
       <t>Instance data validation as defined in <xref
-      target="RFC6020"/> is only applicable to XML-encoded data. For
-      one, semantic constraints in "must" statements are expressed
-      using XPath 1.0 <xref target="W3C.REC-xpath-19991116"/>, which
-      can be properly interpreted only in the XML context.</t>
+      target="I-D.ietf-netmod-rfc6020bis"/>, sec. 8.3.3, is only
+      applicable to XML-encoded data. For one, semantic constraints in
+      "must" statements are expressed using XPath 1.0 <xref
+      target="W3C.REC-xpath-19991116"/>, which can be properly
+      interpreted only in the XML context.</t>
       <t>This document and the corresponding "XML Mapping Rules"
-      sections from <xref target="RFC6020"/> also define an implicit
-      schema-driven mapping of JSON-encoded instances to XML-encoded
-      instances (and vice versa). This mapping is mostly
-      straightforward. In cases where doubts could arise, this
-      document gives explicit instructions for mapping JSON-encoded
-      instances to XML.</t>
-      <t>In order to validate a JSON instance document, it MUST first be
-      mapped, at least conceptually, to the corresponding XML instance
-      document. By definition, the JSON document is then valid if and
-      only if the XML document is valid according to the rules stated in
-      <xref target="RFC6020"/>.</t>
+      sections from <xref target="I-D.ietf-netmod-rfc6020bis"/> also
+      define an implicit schema-driven mapping of JSON-encoded
+      instances to XML-encoded instances (and vice versa). This
+      mapping is mostly straightforward. In cases where doubts could
+      arise, this document gives explicit instructions for mapping
+      JSON-encoded instances to XML.</t>
+      <t>In order to validate a JSON instance document, it MUST first
+      be mapped, at least conceptually, to the corresponding XML
+      instance document. By definition, the JSON document is then
+      valid if and only if the XML document is valid according to the
+      rules stated in <xref target="I-D.ietf-netmod-rfc6020bis"/>.</t>
     </section>
 
     <section anchor="sec.names-ns" title="Names and Namespaces">
@@ -270,7 +274,8 @@
 	<t>The ordering of array elements follows the same rules as
 	the ordering of XML elements representing leaf-list entries in
 	the XML encoding. Specifically, the "ordered-by" properties
-	(sec. 7.7.5 in <xref target="RFC6020"/>) MUST be observed.</t>
+	(sec. 7.7.7 in <xref target="I-D.ietf-netmod-rfc6020bis"/>)
+	MUST be observed.</t>
         <t>Example: For the leaf-list definition
         <figure>
           <artwork>
@@ -296,7 +301,8 @@
 	<t>The ordering of array elements follows the same rules as
 	the ordering of XML elements representing list entries in the
 	XML encoding. Specifically, the "ordered-by" properties
-	(sec. 7.7.5 in <xref target="RFC6020"/>) MUST be observed.</t>
+	(sec. 7.7.7 in <xref target="I-D.ietf-netmod-rfc6020bis"/>)
+	MUST be observed.</t>
         <t>Unlike the XML encoding, where list keys are required to
         precede any other siblings within a list entry, and appear in
         the order specified by the data model, the order of members in
@@ -346,11 +352,11 @@
         XML-encoded anyxml instances - note that such a mapping is not
         needed for the purposes of validation (<xref
         target="sec.valid"/>) because anyxml contents are not subject
-        to YANG-based validation (see sec. 7.10 in <xref
-        target="RFC6020"/>). However, each definition of an anyxml
-        node MAY specify, in its "description" statement, appropriate
-        syntactic, semantic and mapping rules for the values of that
-        anyxml data node.</t>
+        to YANG-based validation (see sec. 7.11 in <xref
+        target="I-D.ietf-netmod-rfc6020bis"/>). However, each
+        definition of an anyxml node MAY specify, in its "description"
+        statement, appropriate syntactic, semantic and mapping rules
+        for the values of that anyxml data node.</t>
         <t>Example: For the anyxml definition
         <figure>
           <artwork>
@@ -381,7 +387,8 @@
         <t>A value of the "int64", "uint64" or "decimal64" type is
         encoded as a JSON string whose contents is the lexical
         representation of that numeric value as specified in sections
-        9.2.1 and 9.3.1 of <xref target="RFC6020"/>.</t>
+        9.2.1 and 9.3.1 of <xref
+        target="I-D.ietf-netmod-rfc6020bis"/>.</t>
         <t>For example, if the type of the leaf "foo" in <xref
         target="sec.leaf"/> was "uint64" instead of "uint8", the
         instance would have to be encoded as</t>
@@ -410,21 +417,22 @@
         <t>An "enumeration" value is mapped in the same way as a
         string except that the permitted values are defined by "enum"
         statements in YANG. See sec. 9.6 in <xref
-        target="RFC6020"/>.</t>
+        target="I-D.ietf-netmod-rfc6020bis"/>.</t>
       </section>
 
       <section anchor="sec.bits" title='The "bits" Type'>
         <t>A "bits" value is mapped to a JSON string identical to the
         lexical representation of this value in XML, i.e.,
         space-separated names representing the individual bit values
-        that are set. See sec. 9.7 in <xref target="RFC6020"/>.</t>
+        that are set. See sec. 9.7 in <xref
+        target="I-D.ietf-netmod-rfc6020bis"/>.</t>
       </section>
 
       <section anchor="sec.binary" title='The "binary" Type'>
         <t>A "binary" value is mapped to a JSON string identical to
         the lexical representation of this value in XML, i.e.,
         base64-encoded binary data. See sec. 9.8 in <xref
-        target="RFC6020"/>.</t>
+        target="I-D.ietf-netmod-rfc6020bis"/>.</t>
       </section>
 
       <section anchor="sec.leafref" title='The "leafref" Type'>
@@ -538,10 +546,10 @@
       <section anchor="sec.i-i" title='The "instance-identifier" Type'>
         <t>An "instance-identifier" value is encoded as a string that
         is analogical to the lexical representation in XML encoding,
-        see sec. 9.13.3 in <xref target="RFC6020"/>. However,
-	the encoding of namespaces in instance-identifier values
-	follows the rules stated in <xref target="sec.names-ns"/>,
-	namely:
+        see sec. 9.13.3 in <xref
+        target="I-D.ietf-netmod-rfc6020bis"/>. However, the encoding
+        of namespaces in instance-identifier values follows the rules
+        stated in <xref target="sec.names-ns"/>, namely:
 	<list style="symbols">
 	  <t>The namespace identifier is the module name where each
 	  data node is defined.</t>
@@ -589,32 +597,20 @@
         reliably. See <xref target="sec.numtypes"/> for details.</t>
       </list>
       </t>
-      <t>The only two cases where a JSON instance document encoded
-      according to this document may deviate from I-JSON were dictated
-      by the need to be able to encode the same instance data in both JSON
-      and XML. These two exceptions are:
-      <list style="symbols">
-        <t>Leaf values encoded as strings may contain code points
-        identifying Noncharacters that belong to the XML character set
-        (see sec. 2.2 in <xref target="W3C.REC-xml-20081126"/>). This
-        issue is likely to be solved in YANG 1.1 because noncharacters
-        will not be allowed in string values, see sec. 9.4 in <xref
-        target="I-D.ietf-netmod-rfc6020bis"/>.</t>
-        <t>Values of the "binary" type are encoded with the base64
-        encoding scheme (<xref target="sec.binary"/>), whereas I-JSON
-        recommends base64url instead. Theoretically, values of the
-        "binary" type might appear in URI references, such as
-        Request-URI in RESTCONF, although in practice the cases where
-        it is really needed should be extremely rare.</t>
-      </list>
-      </t>
+      <t>This document deviates from I-JSON only in the encoding of
+      values with the "binary" type. It uses the base64 encoding
+      scheme (<xref target="sec.binary"/>), whereas I-JSON recommends
+      base64url instead. Theoretically, values of the "binary" type
+      might appear in URI references, such as Request-URI in RESTCONF,
+      although in practice the cases where it is really needed should
+      be extremely rare.</t>
     </section>
 
     <section anchor="sec.cons" title="Security Considerations">
       <t>This document defines an alternative encoding for data
       modeled in the YANG data modeling language. As such, it doesn't
       contribute any new security issues beyond those discussed in
-      sec. 15 of <xref target="RFC6020"/>.</t>
+      sec. 16 of <xref target="I-D.ietf-netmod-rfc6020bis"/>.</t>
       <t>JSON is rather different from XML, and JSON parsers may thus
       suffer from other types of vulnerabilities than their XML
       counterparts. To minimize these security risks, it is important
@@ -622,9 +618,7 @@
       as required in sec. 3 of <xref
       target="I-D.ietf-json-i-json"/>. That is, received JSON data
       that violate any of I-JSON strict constraints MUST NOT be
-      trusted nor acted upon. Violations due to the presence of
-      Unicode Noncharacters in the data (see <xref
-      target="sec.i-json"/>) SHOULD be carefully examined.</t>
+      trusted nor acted upon.</t>
     </section>
 
     <section anchor="sec.ack" title="Acknowledgments">
@@ -641,7 +635,7 @@
       &I-D.ietf-json-i-json;
       &RFC7159;
       &RFC2119;
-      &RFC6020;
+      &I-D.ietf-netmod-rfc6020bis;
       &RFC6241;
       &W3C.REC-xml-20081126;
     </references>
@@ -650,7 +644,6 @@
       &RFC7223;
       &W3C.REC-xpath-19991116;
       &I-D.ietf-netconf-restconf;
-      &I-D.ietf-netmod-rfc6020bis;
     </references>
 
     <section anchor="app.ex-if"
@@ -673,6 +666,17 @@
     <section title="Change Log">
 
       &ed-hint-remove-sec;
+
+      <section title="Changes Between Revisions -03 and -04">
+        <t>
+          <list style="symbols">
+	    <t>I-D.ietf-netmod-rfc6020bis is used as a normative
+	    reference instead of RFC 6020.</t>
+	    <t>Remove noncharacters as an I-JSON issue because it
+	    doesn't exist in YANG 1.1.</t>
+	  </list>
+	</t>
+      </section>
       
       <section title="Changes Between Revisions -02 and -03">
         <t>
