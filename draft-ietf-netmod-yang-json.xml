@@ -63,8 +63,7 @@
       <t>In order to achieve maximum interoperability while allowing
       implementations to use a variety of available JSON parsers, the
       JSON encoding rules follow, as much as possible, the constraints
-      of the I-JSON restricted profile <xref
-      target="I-D.ietf-json-i-json"/>. <xref
+      of the I-JSON restricted profile <xref target="RFC7493"/>. <xref
       target="sec.i-json"/> discusses I-JSON conformance in more
       detail.</t>
     </section>
@@ -400,7 +399,7 @@
         <t>The special handling of 64-bit numbers follows from I-JSON
         recommendation to encode numbers exceeding the IEEE 754-2008
         double precision range as strings, see sec. 2.2 in <xref
-        target="I-D.ietf-json-i-json"/>.</t>
+        target="RFC7493"/>.</t>
       </section>
 
       <section anchor="sec.string" title='The "string" Type'>
@@ -582,9 +581,9 @@
     </section>
 
     <section anchor="sec.i-json" title="I-JSON Compliance">
-      <t>I-JSON <xref target="I-D.ietf-json-i-json"/> is a restricted
-      profile of JSON that guarantees maximum interoperability for
-      protocols that use JSON in their messages, no matter what JSON
+      <t>I-JSON <xref target="RFC7493"/> is a restricted profile of
+      JSON that guarantees maximum interoperability for protocols that
+      use JSON in their messages, no matter what JSON
       encoders/decoders are used in protocol implementations. The
       encoding defined in this document therefore observes the I-JSON
       requirements and recommendations as closely as possible.</t>
@@ -611,14 +610,12 @@
       modeled in the YANG data modeling language. As such, it doesn't
       contribute any new security issues beyond those discussed in
       sec. 16 of <xref target="I-D.ietf-netmod-rfc6020bis"/>.</t>
-      <t>JSON is rather different from XML, and JSON parsers may thus
-      suffer from other types of vulnerabilities than their XML
-      counterparts. To minimize these security risks, it is important
-      that client and server software supporting JSON encoding behaves
-      as required in sec. 3 of <xref
-      target="I-D.ietf-json-i-json"/>. That is, received JSON data
-      that violate any of I-JSON strict constraints MUST NOT be
-      trusted nor acted upon.</t>
+      <t>JSON processing is rather different from XML, and JSON
+      parsers may thus suffer from other types of vulnerabilities than
+      their XML counterparts. To minimize these new security risks,
+      software on the receiving side SHOULD reject all messages that
+      do not comply to the rules of this document and reply with an
+      appropriate error message to the sender.</t>
     </section>
 
     <section anchor="sec.ack" title="Acknowledgments">
@@ -632,11 +629,11 @@
   <back>
     
     <references title="Normative References">
-      &I-D.ietf-json-i-json;
       &RFC7159;
       &RFC2119;
       &I-D.ietf-netmod-rfc6020bis;
       &RFC6241;
+      &RFC7493;
       &W3C.REC-xml-20081126;
     </references>
 
