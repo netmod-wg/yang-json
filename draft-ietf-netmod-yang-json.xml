@@ -53,9 +53,9 @@
       target="I-D.ietf-netconf-restconf"/> supports two encodings: XML
       (media type "application/yang.data+xml") and JSON (media type
       "application/yang.data+json).</t>
-      <t>The specification of the YANG data modelling language <xref
+      <t>The specification of YANG 1.1 data modelling language <xref
       target="I-D.ietf-netmod-rfc6020bis"/> defines only XML encoding
-      for data instances, i.e. contents of configuration datastores,
+      for data instances, i.e., contents of configuration datastores,
       state data, RFC input and output parameters, and event
       notifications. The aim of this document is to define rules for
       encoding the same data as JavaScript Object Notation (JSON)
@@ -109,8 +109,8 @@
       mapping is mostly straightforward. In cases where doubts could
       arise, this document gives explicit instructions for mapping
       JSON-encoded instances to XML.</t>
-      <t>In order to validate a JSON instance document, it MUST first
-      be mapped, at least conceptually, to the corresponding XML
+      <t>In order to validate a JSON instance document, it needs first
+      to be mapped, at least conceptually, to the corresponding XML
       instance document. By definition, the JSON document is then
       valid if and only if the XML document is valid according to the
       rules stated in <xref target="I-D.ietf-netmod-rfc6020bis"/>.</t>
@@ -118,10 +118,10 @@
 
     <section anchor="sec.names-ns" title="Names and Namespaces">
       <t>Instances of YANG data nodes (leafs, containers, leaf-lists,
-      lists and anyxml nodes) are always encoded as members of a JSON
-      object, i.e., as name/value pairs. This section defines how the
-      name part is formed, and the following sections deal with the
-      value part.</t>
+      lists, anydata and anyxml nodes) are always encoded as members
+      of a JSON object, i.e., as name/value pairs. This section
+      defines how the name part is formed, and the following sections
+      deal with the value part.</t>
       <t>Except in the cases specified below, the member name is
       identical to the identifier of the corresponding YANG data
       node. Every such name belongs to a namespace which is associated
@@ -131,21 +131,24 @@
       submodule belongs.</t>
       <t>If the namespace of a member name has to be explicitly
       specified, the module name SHALL be used as a prefix to the
-      (local) member name. Both parts of the member name SHALL be
-      separated with a colon character (":"). In other words, the
-      namespace-qualified name will have the following form:</t>
+      member's local name. Both parts of the member name SHALL be
+      separated with a colon character (":"). Using ABNF <xref
+      target="RFC5234"/>, the namespace-qualified name can be
+      expressed as shown in <xref target="fig.ns-enc"/>, where the
+      production for "identifier" is defined in sec. 13 of <xref
+      target="I-D.ietf-netmod-rfc6020bis"/>.</t>
 
       <figure anchor="fig.ns-enc"
-              title="Encoding a namespace identifier with a local name.">
+              title="ABNF production for a qualified member name.">
         <artwork>
-        <![CDATA[<module name>:<local name>]]>
+        <![CDATA[qualified-member-name = identifier ":" identifier]]>
         </artwork>
       </figure>
 
       <t>Names with namespace identifiers in the form shown in <xref
       target="fig.ns-enc"/> are used if and only if the parent data
       node belongs to a different namespace, which also includes all
-      top-level YANG data nodes.</t>
+      top-level YANG data nodes that have no parent node.</t>
       <t>For example, consider the following YANG module:
       <figure>
         &foomod.yang;
@@ -238,9 +241,9 @@
       <section anchor="sec.container"
                title='The "container" Data Node'>
 
-        <t>An container instance is
-        encoded as a name/object pair. The container's child data
-        nodes are encoded as members of the object.</t>
+        <t>A container instance is encoded as a name/object pair. The
+        container's child data nodes are encoded as members of the
+        object.</t>
         <t>Example: For the container definition
         <figure>
           <artwork>
@@ -251,7 +254,7 @@
 }]]>
           </artwork>
         </figure>
-        the following is a valid instance:
+        the following is a valid JSON-encoded instance:
         <figure>
           <artwork>
 <![CDATA["bar": {
@@ -266,10 +269,11 @@
                title='The "leaf-list" Data Node'>
 
         <t>A leaf-list is encoded as a name/array pair, and the array
-        elements are values of the same type, which can be a string,
-        number, literal "true" or "false", or the special array
-        "[null]", depending on the type of the leaf-list (see <xref
-        target="sec.datatypes"/> for the type encoding rules).</t>
+        elements are values of some scalar type, which can be a
+        string, number, literal "true" or "false", or the special
+        array "[null]", depending on the type of the leaf-list (see
+        <xref target="sec.datatypes"/> for the type encoding
+        rules).</t>
 	<t>The ordering of array elements follows the same rules as
 	the ordering of XML elements representing leaf-list entries in
 	the XML encoding. Specifically, the "ordered-by" properties
@@ -283,7 +287,7 @@
 }]]>
           </artwork>
         </figure>
-        the following is a valid instance:
+        the following is a valid JSON-encoded instance:
         <figure>
           <artwork>
 <![CDATA["foo": [123, 0]]]>
@@ -321,7 +325,7 @@
 }]]>
           </artwork>
         </figure>
-        the following is a valid instance:
+        the following is a valid JSON-encoded instance:
         <figure>
           <artwork>
 <![CDATA["bar": [
@@ -336,33 +340,81 @@
 ]]]>
           </artwork>
         </figure>
+	
         </t>
 
       </section>
+
+      <section anchor="sec.anydata"
+	       title='The "anydata" Data Node'>
+	<t>Anydata data node is a new feature in YANG 1.1. It serves
+	as a container for data that appear as normal YANG-modeled
+	data, except their data model is not a priori known.</t>
+	<t>An anydata instance is thus encoded in the same way as a
+	container, and its content is subject to the following rules:
+	<list style="symbols">
+	  <t>It is a valid I-JSON message <xref target="RFC7493"/>.</t>
+	  <t>Any member name is either a YANG identifier as defined by
+	  the "identifier" production in sec. 13 of <xref
+	  target="I-D.ietf-netmod-rfc6020bis"/>, or two such
+	  identifiers separated by the colon character (":"). See also
+	  <xref target="sec.names-ns"/>.</t>
+	  <t>Any JSON array contains either only unique scalar values
+	  (as a leaf-list, see <xref target="sec.leaf-list"/>), or
+	  only objects (as a list, see <xref target="sec.list"/>).</t>
+	  <t>The "null" value is only allowed in the single-element
+	  array "[null]" corresponding to the encoding of the "empty"
+	  type, see <xref target="sec.empty"/>.</t>
+	</list></t>
+	<t>If a data model for anydata content is not available, it
+	may be impossible to map a JSON-encoded anydata instance to
+	XML, and vice versa. Note, however, that such a mapping is not
+	needed for validation purposes (<xref target="sec.valid"/>)
+	because anydata contents are generally not subject to
+	YANG-based validation (see sec. 7.10 in <xref
+	target="I-D.ietf-netmod-rfc6020bis"/>).</t>
+	<t>Example: for the anydata definition
+        <figure>
+          <artwork>
+<![CDATA[anydata data;]]>
+	  </artwork>
+	</figure>
+	the following is a valid JSON-encoded instance:
+        <figure>
+          <artwork>
+<![CDATA["data": {
+  "ietf-notification:notification": {
+    "eventTime": "2014-07-29T13:43:01Z",
+    "example-event:event": {
+      "event-class: "fault",
+      "reporting-entity": {
+        "card": "Ethernet0"
+      },
+      "severity": "major"
+    }
+  }
+}]]>
+	  </artwork>
+	</figure>
+	</t>
+      </section>
+
       <section anchor="sec.anyxml"
                title='The "anyxml" Data Node'>
-        <t>An anyxml instance is encoded as a name/value pair. The
-        value can be of any valid JSON type, i.e. an object, array,
-        number, string or one of the literals "true", "false" and
-        "null".</t>
-        <t>This document imposes no other restrictions on the contents
-        of JSON-encoded anyxml instances. It also doesn't define any
-        universal mapping between the contents of JSON- and
-        XML-encoded anyxml instances - note that such a mapping is not
-        needed for the purposes of validation (<xref
-        target="sec.valid"/>) because anyxml contents are not subject
-        to YANG-based validation (see sec. 7.11 in <xref
-        target="I-D.ietf-netmod-rfc6020bis"/>). However, each
-        definition of an anyxml node MAY specify, in its "description"
-        statement, appropriate syntactic, semantic and mapping rules
-        for the values of that anyxml data node.</t>
+        <t>An anyxml instance is encoded as a JSON name/value pair
+        which MUST satisfy I-JSON constraints. Otherwise it is
+        unrestricted, i.e., the value can be an object, array, number,
+        string or one of the literals "true", "false" and "null".</t>
+        <t>As in the case of anydata (<xref target="sec.anydata"/>),
+        there is no universal procedure for mapping JSON-encoded
+        anyxml instances to XML, and vice versa.</t>
         <t>Example: For the anyxml definition
         <figure>
           <artwork>
 <![CDATA[anyxml bar;]]>
           </artwork>
         </figure>
-        the following is a valid instance:
+        the following is a valid JSON-encoded instance:
         <figure>
           <artwork>
 <![CDATA["bar": [true, null, true]]]>
@@ -480,11 +532,14 @@
 
       <section anchor="sec.empty" title='The "empty" Type'>
         <t>An "empty" value is mapped to "[null]", i.e., an array with
-        the "null" literal being its only element.</t>
-        <t>This encoding was chosen instead of using simply "null" in
-        order to facilitate the use of empty leafs in common
-        programming languages. When used in a boolean context, the
-        "[null]" value, unlike "null", evaluates to true.</t>
+        the "null" literal being its only element. For the purposes of
+        this document, "[null]" is treated as an atomic scalar
+        value.</t>
+        <t>This encoding of the "empty" type was chosen instead of
+        using simply "null" in order to facilitate the use of empty
+        leafs in common programming languages. When used in a boolean
+        context, the "[null]" value, unlike "null", evaluates to
+        true.</t>
 
         <t>Example: For the leaf definition
         <figure>
@@ -631,6 +686,7 @@
     <references title="Normative References">
       &RFC7159;
       &RFC2119;
+      &RFC5234;
       &I-D.ietf-netmod-rfc6020bis;
       &RFC6241;
       &RFC7493;
@@ -669,8 +725,11 @@
           <list style="symbols">
 	    <t>I-D.ietf-netmod-rfc6020bis is used as a normative
 	    reference instead of RFC 6020.</t>
-	    <t>Remove noncharacters as an I-JSON issue because it
+	    <t>Removed noncharacters as an I-JSON issue because it
 	    doesn't exist in YANG 1.1.</t>
+	    <t>Section about anydata encoding was added.</t>
+	    <t>Require I-JSON for anyxml encoding.</t>
+	    <t>Use ABNF for defining qualified name.</t>
 	  </list>
 	</t>
       </section>
