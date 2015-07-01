@@ -1,5 +1,5 @@
 I_D = draft-ietf-netmod-yang-json
-REVNO = 04
+REVNO = 05
 DATE ?= $(shell date +%F)
 MODULES =
 FIGURES = ex-get-reply.json foomod.yang barmod.yang
