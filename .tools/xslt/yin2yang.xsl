@@ -2,7 +2,7 @@
 
 <!-- Program name: yin2yang.xsl
 
-Copyright © 2013 by Ladislav Lhotka, CZ.NIC <lhotka@nic.cz>
+Copyright © 2015 by Ladislav Lhotka, CZ.NIC <lhotka@nic.cz>
 
 Translates YIN to YANG (see RFC 6020).
 
@@ -12,22 +12,33 @@ NOTES:
 
 2. This stylesheet supports the following non-standard YIN extension:
 
-Arguments of 'contact', 'description', 'organization' and 'reference'
-(wrapped in <text>) may contain the following HTML elements in the
-"http://www.w3.org/1999/xhtml" namespace:
+   Arguments of 'contact', 'description', 'organization' and
+   'reference' (wrapped in <text>) may contain the following HTML
+   elements in the "http://www.w3.org/1999/xhtml" namespace:
 
-<html:p> - a paragraph of text
-<html:ul> - unordered list
-<html:ol> - ordered list
+   <html:p> - a paragraph of text
+   <html:ul> - unordered list
+   <html:ol> - ordered list
 
-<html:p> elements may, apart from text, also contain empty
-<html:br/> elements that cause an unconditional line break.
+   <html:p> elements may, apart from text, also contain empty
+   <html:br/> elements that cause an unconditional line break.
 
-List elements must contain one or more <html:li> elements
-representing list items with text and <html:br/> elements.
+   List elements must contain one or more <html:li> elements
+   representing list items with text and <html:br/> elements.
 
-A <text> element may also have the xml:id attribute and contain the
-XInclude element <xi:include>.
+   A <text> element may also have the xml:id attribute and contain the
+   XInclude element <xi:include>.
+
+3. The stylesheet tries to break long arguments into multiple
+   lines. If the result isn't satisfactory, it is possible to provide
+   a hint by adding processing instruction <?delim x> as the content
+   of the corresponding statement element, where x is is the delimiter
+   character after which the argument may be split.
+
+   For example, The following pattern can be split on every right
+   parenthesis:
+
+   <pattern value="..."><?delim )?></pattern>
 
 ==
 
@@ -256,6 +267,16 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 	<xsl:with-param name="level" select="count(ancestor::*)-1"/>
       </xsl:call-template>
     </xsl:variable>
+    <xsl:variable name="tdel">
+      <xsl:choose>
+	<xsl:when test="../processing-instruction('delim')">
+	  <xsl:value-of select="../processing-instruction('delim')"/>
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:value-of select="$token-delim"/>
+	</xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <xsl:variable name="txt">
       <xsl:call-template name="escape-text">
 	<xsl:with-param name="text" select="normalize-space(.)"/>
@@ -291,9 +312,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 	    </xsl:call-template>
 	    <xsl:value-of select="concat('+ ',$qchar)"/>
 	  </xsl:with-param>
-	  <xsl:with-param name="wdelim" select="$token-delim"/>
+	  <xsl:with-param name="wdelim" select="$tdel"/>
 	  <xsl:with-param name="break"
-			  select="concat($token-delim,$qchar,'&#xA;')"/>
+			  select="concat($tdel,$qchar,'&#xA;')"/>
 	  <xsl:with-param name="at-start" select="true()"/>
 	</xsl:call-template>
       </xsl:otherwise>

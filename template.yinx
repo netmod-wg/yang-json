@@ -32,7 +32,7 @@
     </description>
     <reference>
       <text>
-	RFC XXXX: Defining and Using Metadata with YANG
+	RFC XXXX: %%RFC_TITLE%%
       </text>
     </reference>
   </revision>
