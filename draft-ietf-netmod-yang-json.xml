@@ -34,9 +34,9 @@
     &netmod-wg;
     <abstract>
       <t>This document defines encoding rules for representing
-      configuration, state data, RPC input and output parameters, and
-      notifications defined using YANG as JavaScript Object Notation
-      (JSON) text.</t>
+      configuration, state data, RPC operation or action input and
+      output parameters, and notifications defined using YANG as
+      JavaScript Object Notation (JSON) text.</t>
     </abstract>
   </front>
 
@@ -56,99 +56,96 @@
       <t>The specification of YANG 1.1 data modelling language <xref
       target="I-D.ietf-netmod-rfc6020bis"/> defines only XML encoding
       for data instances, i.e., contents of configuration datastores,
-      state data, RFC input and output parameters, and event
-      notifications. The aim of this document is to define rules for
-      encoding the same data as JavaScript Object Notation (JSON)
-      text <xref target="RFC7159"/>.</t>
-      <t>In order to achieve maximum interoperability while allowing
-      implementations to use a variety of available JSON parsers, the
-      JSON encoding rules follow, as much as possible, the constraints
-      of the I-JSON restricted profile <xref target="RFC7493"/>. <xref
-      target="sec.i-json"/> discusses I-JSON conformance in more
-      detail.</t>
+      state data, RPC operation or action input and output parameters,
+      and event notifications. The aim of this document is to define
+      rules for encoding the same data as JavaScript Object Notation
+      (JSON) text <xref target="RFC7159"/>.</t>
     </section>
 
     <section anchor="sec.term-not" title="Terminology and Notation">
-      
-      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
-      NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL"
-      in this document are to be interpreted as described in <xref
-      target="RFC2119"/>.</t>
+
+      &kw-2119;
 
       <t>The following terms are defined in <xref
       target="I-D.ietf-netmod-rfc6020bis"/>:
       <list style="symbols">
+	<t>action,</t>
 	<t>anydata,</t>
         <t>anyxml,</t>
         <t>augment,</t>
         <t>container,</t>
         <t>data node,</t>
+        <t>data tree,</t>
         <t>identity,</t>
         <t>instance identifier,</t>
         <t>leaf,</t>
         <t>leaf-list,</t>
         <t>list,</t>
         <t>module,</t>
+	<t>RPC operation,</t>
         <t>submodule.</t>
       </list></t>
 
     </section>
 
-    <section anchor="sec.valid" title="Validation of JSON-encoded
-                                       Instance Data">
-      <t>Instance data validation as defined in <xref
-      target="I-D.ietf-netmod-rfc6020bis"/>, sec. 8.3.3, is only
-      applicable to XML-encoded data. For one, semantic constraints in
-      "must" statements are expressed using XPath 1.0 <xref
-      target="W3C.REC-xpath-19991116"/>, which can be properly
-      interpreted only in the XML context.</t>
-      <t>This document and the corresponding "XML Mapping Rules"
-      sections from <xref target="I-D.ietf-netmod-rfc6020bis"/> also
-      define an implicit schema-driven mapping of JSON-encoded
-      instances to XML-encoded instances (and vice versa). This
-      mapping is mostly straightforward. In cases where doubts could
-      arise, this document gives explicit instructions for mapping
-      JSON-encoded instances to XML.</t>
-      <t>In order to validate a JSON instance document, it needs first
-      to be mapped, at least conceptually, to the corresponding XML
-      instance document. By definition, the JSON document is then
-      valid if and only if the XML document is valid according to the
-      rules stated in <xref target="I-D.ietf-netmod-rfc6020bis"/>.</t>
+    <section anchor="sec.properties"
+	     title="Properties of the JSON Encoding">
+      <t>This document defines JSON encoding for YANG data trees and
+      their subtrees. It is always assumed that the top-level
+      structure in JSON-encoded data is an object.</t>
+      <t>Instances of YANG data nodes (leafs, containers, leaf-lists,
+      lists, anydata and anyxml nodes) are encoded as members of a
+      JSON object, i.e., name/value pairs. <xref
+      target="sec.names-ns"/> defines how the name part is formed, and
+      the following sections deal with the value part.</t>
+      <t>Unlike XML element content, JSON values carry partial type
+      information (number, string, boolean). The JSON encoding is
+      defined so that this information is never in conflict with the
+      data type of the corresponding YANG leaf or leaf-list.</t>
+      <t>With the exception of anyxml and schema-less anydata nodes,
+      it is possible to map a JSON-encoded data tree to XML encoding
+      as defined in <xref target="I-D.ietf-netmod-rfc6020bis"/>, and
+      vice versa. However, such conversions require the YANG data
+      model to be available.</t>
+      <t>In order to achieve maximum interoperability while allowing
+      implementations to use a variety of existing JSON parsers, the
+      JSON encoding rules follow, as much as possible, the constraints
+      of the I-JSON restricted profile <xref target="RFC7493"/>. <xref
+      target="sec.i-json"/> discusses I-JSON conformance in more
+      detail.</t>
     </section>
 
     <section anchor="sec.names-ns" title="Names and Namespaces">
-      <t>Instances of YANG data nodes (leafs, containers, leaf-lists,
-      lists, anydata and anyxml nodes) are always encoded as members
-      of a JSON object, i.e., as name/value pairs. This section
-      defines how the name part is formed, and the following sections
-      deal with the value part.</t>
-      <t>Except in the cases specified below, the member name is
-      identical to the identifier of the corresponding YANG data
-      node. Every such name belongs to a namespace which is associated
-      with the YANG module where the corresponding data node is
-      defined. If the data node is defined in a submodule, then the
-      namespace is determined by the main module to which the
-      submodule belongs.</t>
-      <t>If the namespace of a member name has to be explicitly
-      specified, the module name SHALL be used as a prefix to the
-      member's local name. Both parts of the member name SHALL be
-      separated with a colon character (":"). Using ABNF <xref
-      target="RFC5234"/>, the namespace-qualified name can be
-      expressed as shown in <xref target="fig.ns-enc"/>, where the
-      production for "identifier" is defined in sec. 13 of <xref
+      <t>An object member name MUST be in one of the following forms:
+      <list style="symbols">
+	<t>simple - identical to the identifier of the corresponding
+	YANG data node;</t>
+	<t>namespace-qualified - the data node identifier is prefixed
+	with the name of the module in which the data node is defined,
+	and separated by the colon character (":").</t>
+      </list></t>
+      <t>The name of a module determines the namespace of all data
+      node names defined in that module. If a data node is defined in
+      a submodule, then the namespace-qualified member name uses the
+      name of the main module to which the submodule belongs.</t>
+      <t>ABNF syntax <xref target="RFC5234"/> of a member name is
+      shown in <xref target="fig.mname"/>, where the production for
+      "identifier" is defined in sec. 13 of <xref
       target="I-D.ietf-netmod-rfc6020bis"/>.</t>
 
-      <figure anchor="fig.ns-enc"
-              title="ABNF production for a qualified member name.">
+      <figure anchor="fig.mname"
+              title="ABNF production for a JSON member name.">
         <artwork>
-        <![CDATA[qualified-member-name = identifier ":" identifier]]>
+        <![CDATA[member-name = [identifier ":"] identifier]]>
         </artwork>
       </figure>
 
-      <t>Names with namespace identifiers in the form shown in <xref
-      target="fig.ns-enc"/> are used if and only if the parent data
-      node belongs to a different namespace, which also includes all
-      top-level YANG data nodes that have no parent node.</t>
+      <t>A namespace-qualified member name MUST be used for all
+      members of a top-level JSON object, and then also whenever the
+      namespaces of the data node and its parent node are
+      different. In all other cases, the simple form of the member
+      name MUST be used.</t>
+
       <t>For example, consider the following YANG module:
       <figure>
         &foomod.yang;
@@ -165,9 +162,9 @@
         </artwork>
       </figure>
       </t>
-      <t>Note that the top-level container instance contains the
-      namespace identifier (module name) but the "foo" leaf doesn't
-      because it is defined in the same module as its parent container.</t>
+      <t>Note that the member of the top-level object uses the
+      namespace-qualified name but the "foo" leaf doesn't because it
+      is defined in the same module as its parent container "top".</t>
       <t>Now, assume the container "top" is augmented from another
       module, "barmod":
       <figure>
@@ -188,12 +185,12 @@
       </figure>
       </t>
       <t>The name of the "bar" leaf is prefixed with the namespace
-      identifier because its parent is defined in a different module,
-      hence it belongs to another namespace.</t>
+      identifier because its parent is defined in a different
+      module.</t>
       <t>Explicit namespace identifiers are sometimes needed when
       encoding values of the "identityref" and "instances-identifier"
-      types. The same form as shown in <xref target="fig.ns-enc"/> is
-      then used as well. See Sections <xref format="counter"
+      types. The same form of namespace-qualified name as defined
+      above is then used. See Sections <xref format="counter"
       target="sec.idref"/> and <xref format="counter"
       target="sec.i-i"/> for details.</t>
     </section>
@@ -201,16 +198,12 @@
     <section anchor="sec.datanodes"
              title="Encoding of YANG Data Node Instances">
 
-      <t>Every complete JSON instance document, such as a
-      configuration datastore content, is an object. Its members are
-      instances of all top-level data nodes defined by the YANG data
-      model.</t>
-      <t>Character encoding MUST be UTF-8.</t>
-      <t>Any data node instance is encoded as a name/value pair where
-      the name is formed from the data node identifier using the rules
-      of <xref target="sec.names-ns"/>. The value depends on the
+      <t>Every data node instance is encoded as a name/value pair
+      where the name is formed from the data node identifier using the
+      rules of <xref target="sec.names-ns"/>. The value depends on the
       category of the data node as explained in the following
       subsections.</t>
+      <t>Character encoding MUST be UTF-8.</t>
 
       <section anchor="sec.leaf"
                title='The "leaf" Data Node'>
@@ -298,7 +291,7 @@
 
       <section anchor="sec.list"
                title='The "list" Data Node'>
-        
+
         <t>A list instance is encoded as a name/array pair, and the
         array elements are JSON objects.</t>
 	<t>The ordering of array elements follows the same rules as
@@ -348,17 +341,19 @@
       <section anchor="sec.anydata"
 	       title='The "anydata" Data Node'>
 	<t>Anydata data node is a new feature in YANG 1.1. It serves
-	as a container for data that appear as normal YANG-modeled
-	data, except their data model is not a priori known.</t>
-	<t>An anydata instance is thus encoded in the same way as a
-	container, and its content is subject to the following rules:
+	as a container for an unknown set of nodes that however appear
+	as normal YANG-modeled data. A data model for anydata content
+	may or may not exist at run time. In the latter case, no
+	universal mapping between JSON- and XML-encoded instances is
+	available.</t>
+	<t>An anydata instance is encoded in the same way as a
+	container, i.e., as a value/object pair. The requirement that
+	anydata content can be modeled by YANG implies the following
+	rules for JSON text inside the object:
 	<list style="symbols">
-	  <t>It is a valid I-JSON message <xref target="RFC7493"/>.</t>
-	  <t>Any member name is either a YANG identifier as defined by
-	  the "identifier" production in sec. 13 of <xref
-	  target="I-D.ietf-netmod-rfc6020bis"/>, or two such
-	  identifiers separated by the colon character (":"). See also
-	  <xref target="sec.names-ns"/>.</t>
+	  <t>It is valid I-JSON <xref target="RFC7493"/>.</t>
+	  <t>All object member names satisfy the ABNF production in
+	  <xref target="fig.mname"/>.</t>
 	  <t>Any JSON array contains either only unique scalar values
 	  (as a leaf-list, see <xref target="sec.leaf-list"/>), or
 	  only objects (as a list, see <xref target="sec.list"/>).</t>
@@ -366,13 +361,6 @@
 	  array "[null]" corresponding to the encoding of the "empty"
 	  type, see <xref target="sec.empty"/>.</t>
 	</list></t>
-	<t>If a data model for anydata content is not available, it
-	may be impossible to map a JSON-encoded anydata instance to
-	XML, and vice versa. Note, however, that such a mapping is not
-	needed for validation purposes (<xref target="sec.valid"/>)
-	because anydata contents are generally not subject to
-	YANG-based validation (see sec. 7.10 in <xref
-	target="I-D.ietf-netmod-rfc6020bis"/>).</t>
 	<t>Example: for the anydata definition
         <figure>
           <artwork>
@@ -405,8 +393,7 @@
         which MUST satisfy I-JSON constraints. Otherwise it is
         unrestricted, i.e., the value can be an object, array, number,
         string or one of the literals "true", "false" and "null".</t>
-        <t>As in the case of anydata (<xref target="sec.anydata"/>),
-        there is no universal procedure for mapping JSON-encoded
+        <t>There is no universal procedure for mapping JSON-encoded
         anyxml instances to XML, and vice versa.</t>
         <t>Example: For the anyxml definition
         <figure>
@@ -426,19 +413,19 @@
     </section>
 
     <section anchor="sec.datatypes"
-             title="The Mapping of YANG Data Types to JSON Values">
+             title="Representing YANG Data Types in JSON Values">
 
       <t>The type of the JSON value in an instance of the leaf or
       leaf-list data node depends on the type of that data node as
       specified in the following subsections.</t>
 
       <section anchor="sec.numtypes" title="Numeric Types">
-        <t>A value of the "int8", "int16", "int32", "uint8", "uint16"
-	and "uint32" is represented as a JSON number.</t>
+        <t>A value of the types "int8", "int16", "int32", "uint8",
+        "uint16" and "uint32" is represented as a JSON number.</t>
         <t>A value of the "int64", "uint64" or "decimal64" type is
-        encoded as a JSON string whose contents is the lexical
-        representation of that numeric value as specified in sections
-        9.2.1 and 9.3.1 of <xref
+        represented as a JSON string whose content is the lexical
+        representation of the corresponding YANG type as specified in
+        sections 9.2.1 and 9.3.1 of <xref
         target="I-D.ietf-netmod-rfc6020bis"/>.</t>
         <t>For example, if the type of the leaf "foo" in <xref
         target="sec.leaf"/> was "uint64" instead of "uint8", the
@@ -448,55 +435,60 @@
 <![CDATA["foo": "123"]]>
           </artwork>
         </figure>
-        <t>The special handling of 64-bit numbers follows from I-JSON
-        recommendation to encode numbers exceeding the IEEE 754-2008
-        double precision range as strings, see sec. 2.2 in <xref
-        target="RFC7493"/>.</t>
+        <t>The special handling of 64-bit numbers follows from the
+        I-JSON recommendation to encode numbers exceeding the IEEE
+        754-2008 double precision range as strings, see sec. 2.2 in
+        <xref target="RFC7493"/>.</t>
       </section>
 
       <section anchor="sec.string" title='The "string" Type'>
-        <t>A "string" value encoded as a JSON string, subject to JSON
-        string encoding rules.</t>
+        <t>A "string" value represented as a JSON string, subject to
+        JSON string encoding rules.</t>
       </section>
 
       <section anchor="sec.boolean" title='The "boolean" Type'>
-        <t>A "boolean" value is mapped to the corresponding JSON
+        <t>A "boolean" value is represented as the corresponding JSON
         literal name "true" or "false".</t>
       </section>
 
       <section anchor="sec.enum" title='The "enumeration" Type'>
-        <t>An "enumeration" value is mapped in the same way as a
-        string except that the permitted values are defined by "enum"
-        statements in YANG. See sec. 9.6 in <xref
-        target="I-D.ietf-netmod-rfc6020bis"/>.</t>
+        <t>An "enumeration" value is represented as a JSON string -
+        one of the names assigned by "enum" statements in YANG.</t>
+	<t>The representation is identical to the lexical
+	representation of the "enumeration" type in XML, see sec. 9.6
+	in <xref target="I-D.ietf-netmod-rfc6020bis"/>.</t>
       </section>
 
       <section anchor="sec.bits" title='The "bits" Type'>
-        <t>A "bits" value is mapped to a JSON string identical to the
-        lexical representation of this value in XML, i.e.,
-        space-separated names representing the individual bit values
-        that are set. See sec. 9.7 in <xref
-        target="I-D.ietf-netmod-rfc6020bis"/>.</t>
+        <t>A "bits" value is represented as a JSON string - a
+        space-separated sequence of names of bits that are set. The
+        permitted bit names are assigned by "bit" statements in
+        YANG.</t>
+	<t>The representation is identical to the lexical
+	representation of the "bits" type, see sec. 9.7 in <xref
+	target="I-D.ietf-netmod-rfc6020bis"/>.</t>
       </section>
 
       <section anchor="sec.binary" title='The "binary" Type'>
-        <t>A "binary" value is mapped to a JSON string identical to
-        the lexical representation of this value in XML, i.e.,
-        base64-encoded binary data. See sec. 9.8 in <xref
-        target="I-D.ietf-netmod-rfc6020bis"/>.</t>
+        <t>A "binary" value is represented as a JSON string -
+	base64-encoding of arbitrary binary data.</t>
+	<t>The representation is identical to the lexical
+	representation of the "binary" type in XML, see sec. 9.8 in
+	<xref target="I-D.ietf-netmod-rfc6020bis"/>.</t>
       </section>
 
       <section anchor="sec.leafref" title='The "leafref" Type'>
-        <t>A "leafref" value is mapped according to the same rules as
-        the type of the leaf being referred to.</t>
+        <t>A "leafref" value is represented using the same rules as
+        the type of the leaf to which the leafref value refers.</t>
       </section>
 
       <section anchor="sec.idref" title='The "identityref" Type'>
-        <t>An "identityref" value is mapped to a string representing
-        the name of an identity. Its namespace MUST be expressed as
-        shown in <xref target="fig.ns-enc"/> if it is different from
-        the namespace of the leaf node containing the identityref
-        value, and MAY be expressed otherwise.</t>
+        <t>An "identityref" value is represented as a string - the
+        name of an identity. If the identity is defined in another
+        module than the leaf node containing the identityref value,
+        the namespace-qualified form (<xref target="sec.names-ns"/>)
+        MUST be used. Otherwise, both the simple and
+        namespace-qualified forms are permitted.</t>
         <t>For example, consider the following schematic module:</t>
         <figure>
           <artwork>
@@ -531,15 +523,14 @@
       </section>
 
       <section anchor="sec.empty" title='The "empty" Type'>
-        <t>An "empty" value is mapped to "[null]", i.e., an array with
-        the "null" literal being its only element. For the purposes of
-        this document, "[null]" is treated as an atomic scalar
-        value.</t>
+        <t>An "empty" value is represented as "[null]", i.e., an array
+        with the "null" literal being its only element. For the
+        purposes of this document, "[null]" is considered an atomic
+        scalar value.</t>
         <t>This encoding of the "empty" type was chosen instead of
         using simply "null" in order to facilitate the use of empty
-        leafs in common programming languages. When used in a boolean
-        context, the "[null]" value, unlike "null", evaluates to
-        true.</t>
+        leafs in common programming languages where the "null" value of a
+	member is treated as if the member is not present.</t>
 
         <t>Example: For the leaf definition
         <figure>
@@ -562,9 +553,9 @@
       <section anchor="sec.union" title='The "union" Type'>
         <t>A value of the "union" type is encoded as the value of any
         of the member types.</t>
-        <t>Unlike XML, JSON conveys part of the type information
-        already in the encoding. When validating a value of the
-        "union" type, this information MUST also be taken into account.</t>
+        <t>When validating a value of the "union" type, the type
+        information conveyed by the JSON encoding MUST also be taken
+        into account.</t>
         <t>For example, consider the following YANG definition:
         <figure>
           <artwork>
@@ -577,8 +568,8 @@
           </artwork>
         </figure>
         In RESTCONF <xref target="I-D.ietf-netconf-restconf"/>, it is
-        fully acceptable to set the value of "bar" in the following
-        way when using the "application/yang.data+xml" media type:
+        possible to set the value of "bar" in the following way when
+        using the "application/yang.data+xml" media type:
         <figure>
           <artwork>
 <![CDATA[<bar>13.5</bar>]]>
@@ -605,15 +596,13 @@
         of namespaces in instance-identifier values follows the rules
         stated in <xref target="sec.names-ns"/>, namely:
 	<list style="symbols">
-	  <t>The namespace identifier is the module name where each
-	  data node is defined.</t>
-	  <t>The encoding of a node name with an explicit namespace is
-	  as shown in <xref target="fig.ns-enc"/>.</t>
-	  <t>The leftmost (top-level) node name is always prefixed
-	  with the namespace identifier.</t>
-	  <t>Any subsequent node name has the namespace identifier if
-	  and only if its parent node has a different namespace. This
-	  also holds for node names appearing in predicates.</t>
+	  <t>The leftmost (top-level) data node name is always in the
+	  namespace-qualified form.</t>
+	  <t>Any subsequent data node name is in the
+	  namespace-qualified form if the node is defined in another
+	  module than its parent node, and the simple form is used
+	  otherwise. This rule also holds for node names appearing in
+	  predicates.</t>
 	</list></t>
 	<t>For example,
 	<figure>
@@ -625,12 +614,6 @@
 	"interfaces", "interface" and "name" are defined in the module
 	"ietf-interfaces", whereas "ipv4" and "ip" are defined in
 	"ietf-ip".</t>
-        <t>When translating an instance-identifier value from JSON to
-        XML, the namespace identifier (YANG module name) in each
-        component of the instance-identifier MUST be replaced by an
-        XML namespace prefix that is associated with the namespace URI
-        reference of the module in the scope of the element containing
-	the instance-identifier value.</t>
       </section>
 
     </section>
@@ -651,13 +634,11 @@
         reliably. See <xref target="sec.numtypes"/> for details.</t>
       </list>
       </t>
-      <t>This document deviates from I-JSON only in the encoding of
-      values with the "binary" type. It uses the base64 encoding
-      scheme (<xref target="sec.binary"/>), whereas I-JSON recommends
-      base64url instead. Theoretically, values of the "binary" type
-      might appear in URI references, such as Request-URI in RESTCONF,
-      although in practice the cases where it is really needed should
-      be extremely rare.</t>
+      <t>The JSON encoding defined in this document deviates from
+      I-JSON only in the representation of the "binary" type. In order
+      to remain compatible with XML encoding, the base64 encoding
+      scheme is used (<xref target="sec.binary"/>), whereas I-JSON
+      recommends base64url instead.</t>
     </section>
 
     <section anchor="sec.cons" title="Security Considerations">
@@ -682,7 +663,7 @@
   </middle>
 
   <back>
-    
+
     <references title="Normative References">
       &RFC7159;
       &RFC2119;
@@ -690,18 +671,17 @@
       &I-D.ietf-netmod-rfc6020bis;
       &RFC6241;
       &RFC7493;
-      &W3C.REC-xml-20081126;
     </references>
 
     <references title="Informative References">
       &RFC7223;
-      &W3C.REC-xpath-19991116;
       &I-D.ietf-netconf-restconf;
+      &W3C.REC-xml-20081126;
     </references>
 
     <section anchor="app.ex-if"
              title="A Complete Example">
-      
+
       <t>The JSON document shown below represents the same data as the
       reply to the NETCONF &lt;get&gt; request appearing in Appendix D
       of <xref target="RFC7223"/>. The data model is a combination of
@@ -720,6 +700,16 @@
 
       &ed-hint-remove-sec;
 
+      <section title="Changes Between Revisions -04 and -05">
+        <t>
+          <list style="symbols">
+	    <t>Removed section "Validation of JSON-encoded Instance
+	    Data" and other text about XML-JSON mapping.</t>
+	    <t>Added section "Properties of the JSON Encoding".</t>
+	  </list>
+	</t>
+      </section>
+
       <section title="Changes Between Revisions -03 and -04">
         <t>
           <list style="symbols">
@@ -733,7 +723,7 @@
 	  </list>
 	</t>
       </section>
-      
+
       <section title="Changes Between Revisions -02 and -03">
         <t>
           <list style="symbols">
@@ -745,7 +735,7 @@
 	  </list>
 	</t>
       </section>
-      
+
       <section title="Changes Between Revisions -01 and -02">
         <t>
           <list style="symbols">
@@ -755,7 +745,7 @@
 	  </list>
 	</t>
       </section>
-      
+
       <section title="Changes Between Revisions -00 and -01">
         <t>
           <list style="symbols">
