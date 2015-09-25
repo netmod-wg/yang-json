@@ -52,7 +52,7 @@
       <t>For example, the RESTCONF protocol <xref
       target="I-D.ietf-netconf-restconf"/> supports two encodings: XML
       (media type "application/yang.data+xml") and JSON (media type
-      "application/yang.data+json).</t>
+      "application/yang.data+json").</t>
       <t>The specification of YANG 1.1 data modelling language <xref
       target="I-D.ietf-netmod-rfc6020bis"/> defines only XML encoding
       for data instances, i.e., contents of configuration datastores,
@@ -340,12 +340,11 @@
 
       <section anchor="sec.anydata"
 	       title='The "anydata" Data Node'>
-	<t>Anydata data node is a new feature in YANG 1.1. It serves
-	as a container for an unknown set of nodes that however appear
-	as normal YANG-modeled data. A data model for anydata content
-	may or may not exist at run time. In the latter case, no
-	universal mapping between JSON- and XML-encoded instances is
-	available.</t>
+	<t>Anydata data node serves as a container for an unknown set
+	of nodes that otherwise appear as normal YANG-modeled data. A
+	data model for anydata content may or may not exist at run
+	time. In the latter case, no universal mapping between JSON-
+	and XML-encoded instances is available.</t>
 	<t>An anydata instance is encoded in the same way as a
 	container, i.e., as a value/object pair. The requirement that
 	anydata content can be modeled by YANG implies the following
@@ -374,7 +373,7 @@
   "ietf-notification:notification": {
     "eventTime": "2014-07-29T13:43:01Z",
     "example-event:event": {
-      "event-class: "fault",
+      "event-class": "fault",
       "reporting-entity": {
         "card": "Ethernet0"
       },
@@ -442,7 +441,7 @@
       </section>
 
       <section anchor="sec.string" title='The "string" Type'>
-        <t>A "string" value represented as a JSON string, subject to
+        <t>A "string" value is represented as a JSON string, subject to
         JSON string encoding rules.</t>
       </section>
 
@@ -555,7 +554,9 @@
         of the member types.</t>
         <t>When validating a value of the "union" type, the type
         information conveyed by the JSON encoding MUST also be taken
-        into account.</t>
+        into account. JSON syntax thus provides additional means for
+        resolving union member type that are not available in XML
+        encoding.</t>
         <t>For example, consider the following YANG definition:
         <figure>
           <artwork>
@@ -584,8 +585,14 @@
           </artwork>
         </figure>
         In this case, the JSON encoding indicates the value is
-        supposed to be a number rather than a string.
-        </t>
+        supposed to be a number rather than a string.</t>
+	<t>Conversely, tha value of
+        <figure>
+          <artwork>
+<![CDATA["bar": "1"]]>
+          </artwork>
+        </figure>
+	is to be interpreted as a string.</t>
       </section>
 
       <section anchor="sec.i-i" title='The "instance-identifier" Type'>
