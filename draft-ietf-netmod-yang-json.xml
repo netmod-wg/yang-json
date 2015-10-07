@@ -707,6 +707,14 @@
 
       &ed-hint-remove-sec;
 
+      <section title="Changes Between Revisions -05 and -06">
+        <t>
+          <list style="symbols">
+	    <t>More text and a new example about resolving union-type values.</t>
+	  </list>
+	</t>
+      </section>
+
       <section title="Changes Between Revisions -04 and -05">
         <t>
           <list style="symbols">
