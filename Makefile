@@ -23,10 +23,13 @@ y2dopts = -t $(EXAMPLE_TYPE) -b $(EXAMPLE_BASE)
 
 all: $(idrev).txt
 
+refs: stdrefs.ent
+
 yang: $(yams)
 
 $(idrev).xml: $(I_D).xml $(artworks) figures.ent yang.ent
-	@xsltproc $(xslpars) $(xsldir)/upd-i-d.xsl $< | xmllint --noent -o $@ -
+	@xsltproc --novalid $(xslpars) $(xsldir)/upd-i-d.xsl $< | \
+	  xmllint --noent -o $@ -
 
 $(idrev).txt: $(idrev).xml
 	@xml2rfc --dtd=.tools/schema/rfc2629.dtd $<
@@ -45,8 +48,8 @@ hello.xml: $(yams) hello-external.ent
 	@echo '</capabilities>' >> $@
 	@echo '</hello>' >> $@
 
-refs: figures.ent $(artworks)
-	xsltproc --output stdrefs.ent $(xsldir)/get-refs.xsl $(I_D).xml
+stdrefs.ent: $(I_D).xml
+	xsltproc --novalid --output $@ $(xsldir)/get-refs.xsl $<
 
 yang.ent: $(yams)
 	@echo '<!-- External entities for files with modules -->' > $@
