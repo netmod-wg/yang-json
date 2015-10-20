@@ -122,7 +122,8 @@
 	YANG data node;</t>
 	<t>namespace-qualified - the data node identifier is prefixed
 	with the name of the module in which the data node is defined,
-	and separated by the colon character (":").</t>
+	separated from the data node identifier by the colon character
+	(":").</t>
       </list></t>
       <t>The name of a module determines the namespace of all data
       node names defined in that module. If a data node is defined in
@@ -340,15 +341,16 @@
 
       <section anchor="sec.anydata"
 	       title='The "anydata" Data Node'>
-	<t>Anydata data node serves as a container for an unknown set
-	of nodes that otherwise appear as normal YANG-modeled data. A
-	data model for anydata content may or may not exist at run
-	time. In the latter case, no universal mapping between JSON-
-	and XML-encoded instances is available.</t>
+	<t>Anydata data node serves as a container for an arbitrary
+	set of nodes that otherwise appear as normal YANG-modeled
+	data. A data model for anydata content may or may not be known
+	at run time. In the latter case, converting JSON-encoded
+	instances to the XML encoding defined in <xref
+	target="I-D.ietf-netmod-rfc6020bis"/> may be impossible.</t>
 	<t>An anydata instance is encoded in the same way as a
 	container, i.e., as a value/object pair. The requirement that
 	anydata content can be modeled by YANG implies the following
-	rules for JSON text inside the object:
+	rules for the JSON text inside the object:
 	<list style="symbols">
 	  <t>It is valid I-JSON <xref target="RFC7493"/>.</t>
 	  <t>All object member names satisfy the ABNF production in
@@ -585,8 +587,9 @@
           </artwork>
         </figure>
         In this case, the JSON encoding indicates the value is
-        supposed to be a number rather than a string.</t>
-	<t>Conversely, tha value of
+        supposed to be a number rather than a string, and it is not a
+        valid "uint16" value.</t>
+	<t>Conversely, the value of
         <figure>
           <artwork>
 <![CDATA["bar": "1"]]>
@@ -644,7 +647,7 @@
       <t>The JSON encoding defined in this document deviates from
       I-JSON only in the representation of the "binary" type. In order
       to remain compatible with XML encoding, the base64 encoding
-      scheme is used (<xref target="sec.binary"/>), whereas I-JSON
+      scheme is used (<xref target="sec.binary"/>), whilst I-JSON
       recommends base64url instead.</t>
     </section>
 
