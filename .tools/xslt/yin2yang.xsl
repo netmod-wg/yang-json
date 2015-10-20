@@ -261,6 +261,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
   <xsl:template name="chop-arg">
     <xsl:param name="token-delim" select="'/'"/>
+    <xsl:param name="after" select="2"/>
     <xsl:variable name="qchar">"</xsl:variable>
     <xsl:variable name="cind">
       <xsl:call-template name="indent">
@@ -300,7 +301,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 	  <xsl:with-param name="text" select="$txt"/>
 	  <xsl:with-param
 	      name="length"
-	      select="$line-length - 2 -
+	      select="$line-length - $after -
 		      string-length(concat($cind, local-name(..)))"/>
 	  <xsl:with-param name="prefix">
 	    <xsl:value-of select="$cind"/>
@@ -329,12 +330,12 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
   </xsl:template>
 
   <xsl:template
-      match="yin:anyxml|yin:argument|yin:base|yin:bit|yin:case
-	     |yin:choice|yin:container|yin:enum|yin:extension
-	     |yin:feature|yin:grouping|yin:identity|yin:if-feature
-	     |yin:leaf|yin:leaf-list|yin:list|yin:module
-	     |yin:notification|yin:rpc|yin:submodule|yin:type
-	     |yin:typedef|yin:uses">
+      match="yin:action|yin:anydata|yin:anyxml|yin:argument|yin:base
+	     |yin:bit|yin:case|yin:choice|yin:container|yin:enum
+	     |yin:extension|yin:feature|yin:grouping|yin:identity
+	     |yin:if-feature|yin:leaf|yin:leaf-list|yin:list
+	     |yin:module|yin:notification|yin:rpc|yin:submodule
+	     |yin:type|yin:typedef|yin:uses">
     <xsl:call-template name="statement">
       <xsl:with-param name="arg" select="@name"/>
     </xsl:call-template>
@@ -366,6 +367,12 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 	     |yin:presence|yin:range|yin:require-instance
 	     |yin:status|yin:value|yin:yang-version|yin:yin-element">
     <xsl:call-template name="statement-dq">
+      <xsl:with-param name="arg" select="@value"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="yin:modifier">
+    <xsl:call-template name="statement">
       <xsl:with-param name="arg" select="@value"/>
     </xsl:call-template>
   </xsl:template>
@@ -425,6 +432,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 	  <xsl:otherwise>/</xsl:otherwise>
 	</xsl:choose>
       </xsl:with-param>
+      <xsl:with-param name="after" select="3"/>
     </xsl:call-template>
   </xsl:template>
 
