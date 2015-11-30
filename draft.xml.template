@@ -86,7 +86,9 @@
 
   <back>
     <references title="Normative References">
-      <!-- Look at stdrefs.ent, and add entity references here. -->
+      &RFC2119;
+      <!-- Generate other references by "make refs",
+	   and add entity references here. -->
     </references>
 
     <section anchor="rpc-example" title="Example: NETCONF &lt;get&gt; Reply">

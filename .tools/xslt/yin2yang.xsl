@@ -341,6 +341,18 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template match="yin:namespace">
+    <xsl:call-template name="keyword"/>
+    <xsl:apply-templates select="@uri"/>
+    <xsl:call-template name="semi-or-sub"/>
+  </xsl:template>
+
+  <xsl:template match="@uri">
+    <xsl:call-template name="chop-arg">
+      <xsl:with-param name="token-delim">:</xsl:with-param>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="yin:units">
     <xsl:call-template name="statement-dq">
       <xsl:with-param name="arg" select="@name"/>
@@ -433,12 +445,6 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 	</xsl:choose>
       </xsl:with-param>
       <xsl:with-param name="after" select="3"/>
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template match="yin:namespace">
-    <xsl:call-template name="statement-dq">
-      <xsl:with-param name="arg" select="@uri"/>
     </xsl:call-template>
   </xsl:template>
 
