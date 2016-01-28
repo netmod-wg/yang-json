@@ -6,4 +6,5 @@
 <!ENTITY RFC2119 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY RFC7493 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7493.xml">
 <!ENTITY RFC5234 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5234.xml">
+<!ENTITY I-D.ietf-netmod-yang-metadata SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-netmod-yang-metadata.xml">
 <!ENTITY RFC7223 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7223.xml">
