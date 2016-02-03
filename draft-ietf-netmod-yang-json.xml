@@ -34,9 +34,9 @@
     &netmod-wg;
     <abstract>
       <t>This document defines encoding rules for representing
-      configuration, state data, RPC operation or action input and
-      output parameters, and notifications defined using YANG as
-      JavaScript Object Notation (JSON) text.</t>
+      configuration, state data, parameters of RPC operations or
+      actions, and notifications defined using YANG as JavaScript
+      Object Notation (JSON) text.</t>
     </abstract>
   </front>
 
@@ -56,10 +56,10 @@
       <t>The specification of YANG 1.1 data modelling language <xref
       target="I-D.ietf-netmod-rfc6020bis"/> defines only XML encoding
       for data instances, i.e., contents of configuration datastores,
-      state data, RPC operation or action input and output parameters,
-      and event notifications. The aim of this document is to define
-      rules for encoding the same data as JavaScript Object Notation
-      (JSON) text <xref target="RFC7159"/>.</t>
+      state data, input/output parameters of RPC operations or
+      actions, and event notifications. The aim of this document is to
+      define rules for encoding the same data as JavaScript Object
+      Notation (JSON) text <xref target="RFC7159"/>.</t>
     </section>
 
     <section anchor="sec.term-not" title="Terminology and Notation">
@@ -116,7 +116,8 @@
     </section>
 
     <section anchor="sec.names-ns" title="Names and Namespaces">
-      <t>An object member name MUST be in one of the following forms:
+      <t>A JSON object member name MUST be in one of the following
+      forms:
       <list style="symbols">
         <t>simple - identical to the identifier of the corresponding
         YANG data node;</t>
@@ -706,7 +707,7 @@
       two YANG modules: "ietf-interfaces" and "ex-vlan" (the latter is
       an example module from Appendix C of <xref
       target="RFC7223"/>). The "if-mib" feature defined in the
-      "ietf-interfaces" module is considered to be active.</t>
+      "ietf-interfaces" module is supported.</t>
 
       <figure>
         &ex-get-reply.json;
@@ -718,7 +719,7 @@
 
       &ed-hint-remove-sec;
 
-      <section title="Changes Between Revisions -05 and -06">
+      <section title="Changes Between Revisions -06 and -07">
         <t>
           <list style="symbols">
             <t>General permit on object members whose names start with
