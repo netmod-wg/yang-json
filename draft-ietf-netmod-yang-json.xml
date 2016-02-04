@@ -55,11 +55,11 @@
       "application/yang.data+json").</t>
       <t>The specification of YANG 1.1 data modelling language <xref
       target="I-D.ietf-netmod-rfc6020bis"/> defines only XML encoding
-      for data instances, i.e., contents of configuration datastores,
-      state data, input/output parameters of RPC operations or
-      actions, and event notifications. The aim of this document is to
-      define rules for encoding the same data as JavaScript Object
-      Notation (JSON) text <xref target="RFC7159"/>.</t>
+      of data trees, i.e., contents of configuration datastores, state
+      data, input/output parameters of RPC operations or actions, and
+      event notifications. The aim of this document is to define rules
+      for encoding the same data as JavaScript Object Notation (JSON)
+      text <xref target="RFC7159"/>.</t>
     </section>
 
     <section anchor="sec.term-not" title="Terminology and Notation">
@@ -97,7 +97,10 @@
       lists, anydata and anyxml nodes) are encoded as members of a
       JSON object, i.e., name/value pairs. <xref
       target="sec.names-ns"/> defines how the name part is formed, and
-      the following sections deal with the value part.</t>
+      the following sections deal with the value part. The encoding
+      rules are identical for all types of data trees, i.e.,
+      configuration and state data, parameters of RPC operations and
+      actions, and notifications.</t>
       <t>Unlike XML element content, JSON values carry partial type
       information (number, string, boolean). The JSON encoding is
       defined so that this information is never in conflict with the
@@ -150,14 +153,14 @@
 
       <t>For example, consider the following YANG module:
       <figure>
-        &foomod.yang;
+        &example-foomod.yang;
       </figure></t>
       <t>If the data model consists only of this module, then the
       following is a valid JSON-encoded configuration:
       <figure>
         <artwork>
 <![CDATA[{
-  "foomod:top": {
+  "example-foomod:top": {
     "foo": 54
   }
 }]]>
@@ -168,9 +171,9 @@
       namespace-qualified name but the "foo" leaf doesn't because it
       is defined in the same module as its parent container "top".</t>
       <t>Now, assume the container "top" is augmented from another
-      module, "barmod":
+      module, "example-barmod":
       <figure>
-        &barmod.yang;
+        &example-barmod.yang;
       </figure>
       </t>
       <t>A valid JSON-encoded configuration containing both leafs may
@@ -178,9 +181,9 @@
       <figure>
         <artwork>
 <![CDATA[{
-  "foomod:top": {
+  "example-foomod:top": {
     "foo": 54,
-    "barmod:bar": true
+    "example-barmod:bar": true
   }
 }]]>
         </artwork>
@@ -501,7 +504,7 @@
         <t>For example, consider the following schematic module:</t>
         <figure>
           <artwork>
-<![CDATA[module exmod {
+<![CDATA[module example-mod {
   ...
   import ietf-interfaces {
     prefix if;

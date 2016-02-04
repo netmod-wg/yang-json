@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<module name="foomod"
+<module name="example-foomod"
         xmlns="urn:ietf:params:xml:ns:yang:yin:1"
         xmlns:test="http://example.com/foomod">
   <namespace uri="http://example.com/foomod"/>

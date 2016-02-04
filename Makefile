@@ -2,7 +2,7 @@ I_D = draft-ietf-netmod-yang-json
 REVNO = 08
 DATE ?= $(shell date +%F)
 MODULES =
-FIGURES = ex-get-reply.json foomod.yang barmod.yang
+FIGURES = ex-get-reply.json example-foomod.yang example-barmod.yang
 EXAMPLE_BASE = ex
 EXAMPLE_TYPE = get-reply
 baty = $(EXAMPLE_BASE)-$(EXAMPLE_TYPE)
@@ -109,4 +109,5 @@ model.tree: hello.xml
 	pyang $(PYANG_OPTS) -f tree -o $@ -L $<
 
 clean:
-	@rm -rf hello.xml $(idrev).* $(artworks) figures.ent $(baty).json
+	@rm -rf hello.xml $(idrev).* $(artworks) figures.ent \
+	$(baty).json *.yang
