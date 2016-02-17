@@ -9,6 +9,11 @@ baty = $(EXAMPLE_BASE)-$(EXAMPLE_TYPE)
 EXAMPLE_INST = $(baty).xml
 PYANG_OPTS =
 
+# Paths for pyang
+export PYANG_RNG_LIBDIR ?= /usr/share/yang/schema
+export PYANG_XSLT_DIR ?= /usr/share/yang/xslt
+export YANG_MODPATH ?= .:/usr/share/yang/modules/ietf:/usr/share/yang/modules/iana
+
 artworks = $(addsuffix .aw, $(yams)) $(EXAMPLE_INST).aw \
 	   $(addsuffix .aw, $(FIGURES))
 idrev = $(I_D)-$(REVNO)
