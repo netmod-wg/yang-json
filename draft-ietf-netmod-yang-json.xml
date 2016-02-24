@@ -722,6 +722,15 @@
 
       &ed-hint-remove-sec;
 
+      <section title="Changes Between Revisions -07 and -08">
+        <t>
+	  <list style="symbols">
+	    <t>Changed the names of example modules so that they start
+	    with "example-".</t>
+	  </list>
+	</t>
+      </section>
+
       <section title="Changes Between Revisions -06 and -07">
         <t>
           <list style="symbols">

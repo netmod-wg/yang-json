@@ -4,7 +4,7 @@
         xmlns:test="http://example.com/barmod">
   <namespace uri="http://example.com/barmod"/>
   <prefix value="bar"/>
-  <import module="foomod">
+  <import module="example-foomod">
     <prefix value="foo"/>
   </import>
   <augment target-node="/foo:top">
