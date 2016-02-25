@@ -690,11 +690,11 @@
       &RFC2119;
       &RFC5234;
       &I-D.ietf-netmod-rfc6020bis;
-      &RFC6241;
       &RFC7493;
     </references>
 
     <references title="Informative References">
+      &RFC6241;
       &RFC7223;
       &I-D.ietf-netconf-restconf;
       &I-D.ietf-netmod-yang-metadata;
