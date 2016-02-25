@@ -3,7 +3,7 @@
         xmlns="urn:ietf:params:xml:ns:yang:yin:1"
         xmlns:test="http://example.com/foomod">
   <namespace uri="http://example.com/foomod"/>
-  <prefix value="foo"/>
+  <prefix value="foomod"/>
   <container name="top">
     <leaf name="foo">
       <type name="uint8"/>

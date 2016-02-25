@@ -3,9 +3,9 @@
         xmlns="urn:ietf:params:xml:ns:yang:yin:1"
         xmlns:test="http://example.com/barmod">
   <namespace uri="http://example.com/barmod"/>
-  <prefix value="bar"/>
+  <prefix value="barmod"/>
   <import module="example-foomod">
-    <prefix value="foo"/>
+    <prefix value="foomod"/>
   </import>
   <augment target-node="/foo:top">
     <leaf name="bar">
