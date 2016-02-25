@@ -101,6 +101,9 @@
       rules are identical for all types of data trees, i.e.,
       configuration and state data, parameters of RPC operations and
       actions, and notifications.</t>
+      <t>With the exception of "anydata" encoding (<xref
+      target="sec.anydata"/>), all rules in this document are also
+      applicable to YANG 1.0 <xref target="RFC6020"/>.</t>
       <t>Unlike XML element content, JSON values carry partial type
       information (number, string, boolean). The JSON encoding is
       defined so that this information is never in conflict with the
@@ -694,6 +697,7 @@
     </references>
 
     <references title="Informative References">
+      &RFC6020;
       &RFC6241;
       &RFC7223;
       &I-D.ietf-netconf-restconf;
