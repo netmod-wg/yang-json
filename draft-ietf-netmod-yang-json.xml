@@ -34,7 +34,7 @@
     &netmod-wg;
     <abstract>
       <t>This document defines encoding rules for representing
-      configuration, state data, parameters of RPC operations or
+      configuration data, state data, parameters of RPC operations or
       actions, and notifications defined using YANG as JavaScript
       Object Notation (JSON) text.</t>
     </abstract>
@@ -55,10 +55,10 @@
       "application/yang.data+json").</t>
       <t>The specification of YANG 1.1 data modelling language <xref
       target="I-D.ietf-netmod-rfc6020bis"/> defines only XML encoding
-      of data trees, i.e., contents of configuration datastores, state
-      data, input/output parameters of RPC operations or actions, and
-      event notifications. The aim of this document is to define rules
-      for encoding the same data as JavaScript Object Notation (JSON)
+      of data trees, i.e., configuration data, state data,
+      input/output parameters of RPC operations or actions, and
+      notifications. The aim of this document is to define rules for
+      encoding the same data as JavaScript Object Notation (JSON)
       text <xref target="RFC7159"/>.</t>
     </section>
 
@@ -86,6 +86,13 @@
         <t>submodule.</t>
       </list></t>
 
+      <t>The following terms are defined in <xref target="RFC6241"/>:
+      <list style="symbols">
+        <t>configuration data,</t>
+        <t>notification,</t>
+        <t>state data.</t>
+      </list></t>
+
     </section>
 
     <section anchor="sec.properties"
@@ -99,7 +106,7 @@
       target="sec.names-ns"/> defines how the name part is formed, and
       the following sections deal with the value part. The encoding
       rules are identical for all types of data trees, i.e.,
-      configuration and state data, parameters of RPC operations and
+      configuration data, state data, parameters of RPC operations,
       actions, and notifications.</t>
       <t>With the exception of "anydata" encoding (<xref
       target="sec.anydata"/>), all rules in this document are also
@@ -159,7 +166,7 @@
         &example-foomod.yang;
       </figure></t>
       <t>If the data model consists only of this module, then the
-      following is a valid JSON-encoded configuration:
+      following is a valid JSON-encoded configuration data:
       <figure>
         <artwork>
 <![CDATA[{
@@ -179,8 +186,8 @@
         &example-barmod.yang;
       </figure>
       </t>
-      <t>A valid JSON-encoded configuration containing both leafs may
-      then look like this:
+      <t>A valid JSON-encoded configuration data containing both leafs
+      may then look like this:
       <figure>
         <artwork>
 <![CDATA[{
@@ -693,12 +700,12 @@
       &RFC2119;
       &RFC5234;
       &I-D.ietf-netmod-rfc6020bis;
+      &RFC6241;
       &RFC7493;
     </references>
 
     <references title="Informative References">
       &RFC6020;
-      &RFC6241;
       &RFC7223;
       &I-D.ietf-netconf-restconf;
       &I-D.ietf-netmod-yang-metadata;
