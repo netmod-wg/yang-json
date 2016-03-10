@@ -733,6 +733,17 @@
 
       &ed-hint-remove-sec;
 
+      <section title="Changes Between Revisions -08 and -09">
+        <t>
+	  <list style="symbols">
+	    <t>References to RFC 6241 term in the Terminology section
+	    were added.</t>
+	    <t>Prefixes in the example in Sec. 4 were changed so as to be
+	    different from node names.</t>
+	  </list>
+	</t>
+      </section>
+
       <section title="Changes Between Revisions -07 and -08">
         <t>
 	  <list style="symbols">
